@@ -1,0 +1,25 @@
+name: Unit Tests
+
+on:
+  workflow_call:
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "9.0.x"
+        
+      - name: Build Application # Is the application buildable
+        working-directory: ./Hovedopgave
+        run: dotnet build Hovedopgave.csproj
+
+    #   - name: Run unit tests
+    #     run: dotnet test backend/backend.sln --filter "TestCategory=UnitTest"
+
+
