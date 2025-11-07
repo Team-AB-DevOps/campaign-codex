@@ -15,9 +15,9 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
     public async Task<ActionResult> RegisterUser(RegisterDto registerDto)
     {
 
-        if (!PasswordValidator.Validate(registerDto.Password))
+        if (!PasswordValidator.IsValidate(registerDto.Password))
         {
-            ModelState.AddModelError("Password", "Password does not match complexity criteria.");
+            ModelState.AddModelError("Password", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
             return ValidationProblem();
         }
         
