@@ -1,4 +1,5 @@
 ﻿using Hovedopgave.Core.Controllers;
+using Hovedopgave.Core.Services;
 using Hovedopgave.Features.Account.DTOs;
 using Hovedopgave.Features.Account.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +14,13 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
     [HttpPost("register")]
     public async Task<ActionResult> RegisterUser(RegisterDto registerDto)
     {
+
+        if (!PasswordValidator.Validate(registerDto.Password))
+        {
+            ModelState.AddModelError("Password", "Password does not match complexity criteria.");
+            return ValidationProblem();
+        }
+        
         var user = new User
         {
             UserName = registerDto.Email,
