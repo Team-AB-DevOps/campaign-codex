@@ -12,26 +12,9 @@ public static class PasswordValidator
             return false;
         }
 
-        if (!password.Any(char.IsUpper))
-        {
-            return false;
-        }
-        
-        if (!password.Any(char.IsLower))
-        {
-            return false;
-        }
-        
-        if (!password.Any(char.IsDigit))
-        {
-            return false;
-        }
-        
-        if (!password.Any(c => !char.IsLetterOrDigit(c)))
-        {
-            return false;
-        }
-
-        return true;
+        return password.Any(char.IsUpper) &&
+               password.Any(char.IsLower) &&
+               password.Any(char.IsDigit) &&
+               password.Any(c => !char.IsLetterOrDigit(c));
     }
 }
