@@ -1,4 +1,5 @@
 ﻿using Hovedopgave.Core.Controllers;
+using Hovedopgave.Core.Services;
 using Hovedopgave.Features.Account.DTOs;
 using Hovedopgave.Features.Account.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -13,6 +14,13 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
     [HttpPost("register")]
     public async Task<ActionResult> RegisterUser(RegisterDto registerDto)
     {
+
+        if (!PasswordValidator.IsValidate(registerDto.Password))
+        {
+            ModelState.AddModelError("Password", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+            return ValidationProblem();
+        }
+        
         var user = new User
         {
             UserName = registerDto.Email,
