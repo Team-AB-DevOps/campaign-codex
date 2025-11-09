@@ -4,10 +4,11 @@ namespace Hovedopgave.Core.Services;
 public static class PasswordValidator
 {
     private const int MinLength = 8;
+    private const int MaxLength = 50;
 
     public static bool IsValidate(string password)
     {
-        if (string.IsNullOrEmpty(password) || password.Length < MinLength)
+        if (string.IsNullOrEmpty(password) || password.Length < MinLength || password.Length > MaxLength)
         {
             return false;
         }
