@@ -34,6 +34,8 @@ public class PasswordValidatorUnitTests
     [InlineData("12345678")]
     [InlineData("!@#$%^&*")]
     [InlineData("")]
+    [InlineData("         ")]
+    [InlineData(null)]
     public void IsValidate_Should_ReturnFalse_When_PasswordIsInvalid(string password)
     {
         // Arrange & Act
