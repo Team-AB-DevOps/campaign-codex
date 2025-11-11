@@ -1,0 +1,73 @@
+name: Merge to Main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  unit-tests:
+    name: Run Unit Tests
+    uses: ./.github/workflows/unit_test.yml
+
+  integration-db-tests:
+    name: Run Integration DB Tests
+    needs: unit-tests
+    uses: ./.github/workflows/integration_test.yml
+
+  deploy-containers:
+    name: Deploy application to VM
+    runs-on: ubuntu-latest
+    needs: integration-db-tests
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Executing remote SSH commands
+        uses: appleboy/ssh-action@v1.2.2
+        env:
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          CLOUDNAME: ${{ secrets.CLOUDNAME }}
+          APIKEY: ${{ secrets.APIKEY }}
+          APISECRET: ${{ secrets.APISECRET }}
+        with:
+          host: ${{ secrets.VM_IP_ADDRESS }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          envs: POSTGRES_USER,POSTGRES_PASSWORD,VITE_API_URL,CLOUDNAME,APIKEY,APISECRET
+          script: |
+            echo "Extract repository name from context"
+            REPO_NAME=$(basename "${{ github.repository }}")
+
+            echo "cd to deployment directory"
+            cd ./deployment
+
+            echo "Delete old repository"
+            [ -n "$REPO_NAME" ] && rm -rf "$REPO_NAME"
+
+            echo "Clone repository"
+            git clone "https://github.com/${{ github.repository }}.git"
+
+            echo "cd to repository"
+            cd "$REPO_NAME"
+
+            echo "Ensure Docker is installed"
+            docker --version
+
+            echo "Remove existing containers"
+            sudo docker compose down
+
+            echo "Delete local images"
+            sudo docker image prune --force
+
+            echo "Insert variables for building containers"
+            echo "POSTGRES_USER=$POSTGRES_USER" > .env
+            echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD" >> .env
+            echo "VITE_API_URL=$VITE_API_URL" >> .env
+            echo "CloudName=$CLOUDNAME" >> .env
+            echo "ApiKey=$APIKEY" >> .env
+            echo "ApiSecret=$APISECRET" >> .env
+
+            echo "Build containers"
+            sudo docker compose --env-file .env up -d
