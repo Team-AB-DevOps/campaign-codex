@@ -3,7 +3,7 @@ import { useAccount } from '@/lib/hooks/useAccount';
 import { useCampaigns } from '@/lib/hooks/useCampaigns';
 import { Campaign } from '@/lib/types';
 import { Trash } from 'lucide-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 

@@ -1,0 +1,40 @@
+services:
+  frontend:
+    container_name: frontend-container
+    build:
+      context: ./Hovedopgave/client
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL}
+    restart: always
+    ports:
+      - "80:3000"
+  api:
+    container_name: codex-api
+    build: ./Hovedopgave
+    ports:
+      - "4000:8080"
+    environment:
+      - CONNECTION_STRING=server=postgres-db;port=5432;database=campaign_db;userid=${POSTGRES_USER};password=${POSTGRES_PASSWORD}
+      - CloudName=${CloudName}
+      - ApiKey=${ApiKey}
+      - ApiSecret=${ApiSecret}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  postgres:
+    image: postgres
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_DB: "campaign_db"
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d campaign_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5

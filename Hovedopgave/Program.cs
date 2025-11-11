@@ -27,11 +27,7 @@ Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().Cr
 builder.Host.UseSerilog(); // Use Serilog instead of the default .NET logger
 
 // Try to load .env file if it exists for local development
-const string envFile = ".env";
-if (File.Exists(envFile))
-{
-    Env.Load(envFile);
-}
+Env.TraversePath().Load();
 
 // Add services to the container.
 builder.Configuration.AddEnvironmentVariables();
@@ -99,7 +95,7 @@ app.UseCors(opt =>
     opt.AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials()
-        .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+        .WithOrigins("http://localhost:3000", "http://localhost", "http://46.224.39.173"));
 
 
 if (app.Environment.IsDevelopment())
