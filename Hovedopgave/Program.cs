@@ -95,7 +95,7 @@ app.UseCors(opt =>
     opt.AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials()
-        .WithOrigins("http://localhost:3000", "http://localhost"));
+        .WithOrigins("http://localhost:3000", "http://localhost", "http://46.224.39.173"));
 
 
 if (app.Environment.IsDevelopment())
