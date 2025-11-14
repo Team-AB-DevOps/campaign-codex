@@ -26,7 +26,7 @@ public static class PasswordValidator
     // and checking if the rest of the hash is in the response
     public static async Task<bool> IsPwned(string password)
     {
-        var httpClient = new HttpClient()
+        using var httpClient = new HttpClient()
         {
             BaseAddress = new Uri("https://api.pwnedpasswords.com/")
         };
