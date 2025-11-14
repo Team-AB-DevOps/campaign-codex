@@ -7,6 +7,13 @@
 ## Project Setup
 
 1. **Clone the repository:**
-   ```sh
+   ```bash
    git clone https://github.com/yourusername/campaign-codex.git
    cd campaign-codex
+   ```
+
+2. Restore .NET tools and install Husky locally
+   ```bash
+   dotnet tool restore
+   dotnet husky install
+   ```

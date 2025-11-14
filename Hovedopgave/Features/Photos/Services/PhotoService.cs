@@ -30,8 +30,8 @@ public class PhotoService(ICloudinaryService cloudinaryService, IUserAccessor us
         }
 
 
-         var photoResult = await UploadAndPreparePhotoEntity(file, user.Id);
-       if (!photoResult.IsSuccess)
+        var photoResult = await UploadAndPreparePhotoEntity(file, user.Id);
+        if (!photoResult.IsSuccess)
         {
             return photoResult;
         }
@@ -40,7 +40,7 @@ public class PhotoService(ICloudinaryService cloudinaryService, IUserAccessor us
 
         if (newPhoto == null)
         {
-              return Result<Photo>.Failure("Photo processing failed: received null photo data despite reported success", 500);
+            return Result<Photo>.Failure("Photo processing failed: received null photo data despite reported success", 500);
         }
 
         context.Photos.Add(newPhoto);
@@ -56,9 +56,9 @@ public class PhotoService(ICloudinaryService cloudinaryService, IUserAccessor us
 
     public async Task<Result<Photo>> AddWikiEntryPhoto(IFormFile file, string campaignId)
     {
-          var campaign = await context.Campaigns
-            .Include(c => c.DungeonMaster)
-            .FirstOrDefaultAsync(c => c.Id == campaignId);
+        var campaign = await context.Campaigns
+          .Include(c => c.DungeonMaster)
+          .FirstOrDefaultAsync(c => c.Id == campaignId);
 
         if (campaign == null)
         {
@@ -74,7 +74,7 @@ public class PhotoService(ICloudinaryService cloudinaryService, IUserAccessor us
 
 
         var photoResult = await UploadAndPreparePhotoEntity(file, user.Id);
-       if (!photoResult.IsSuccess)
+        if (!photoResult.IsSuccess)
         {
             return photoResult;
         }
@@ -83,7 +83,7 @@ public class PhotoService(ICloudinaryService cloudinaryService, IUserAccessor us
 
         if (newPhoto == null)
         {
-              return Result<Photo>.Failure("Photo processing failed: received null photo data despite reported success", 500);
+            return Result<Photo>.Failure("Photo processing failed: received null photo data despite reported success", 500);
         }
 
         context.Photos.Add(newPhoto);
@@ -111,8 +111,8 @@ public class PhotoService(ICloudinaryService cloudinaryService, IUserAccessor us
             return Result<Photo>.Failure("You are not the owner of the character", 400);
         }
 
-       var photoResult = await UploadAndPreparePhotoEntity(file, user.Id);
-       if (!photoResult.IsSuccess)
+        var photoResult = await UploadAndPreparePhotoEntity(file, user.Id);
+        if (!photoResult.IsSuccess)
         {
             return photoResult;
         }
@@ -121,7 +121,7 @@ public class PhotoService(ICloudinaryService cloudinaryService, IUserAccessor us
 
         if (newPhoto == null)
         {
-              return Result<Photo>.Failure("Photo processing failed: received null photo data despite reported success", 500);
+            return Result<Photo>.Failure("Photo processing failed: received null photo data despite reported success", 500);
         }
 
         context.Photos.Add(newPhoto);
