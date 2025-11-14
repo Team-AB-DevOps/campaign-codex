@@ -19,6 +19,20 @@
 ## or put your custom commands -------------------
 #echo 'Husky.Net is awesome!'
 
-dotnet test
+echo "
+╔═══════════════════════════════════╗
+║      RUNNING UNIT TESTS           ║
+╚═══════════════════════════════════╝
+"
+
+dotnet husky run --name unit-test
+
+echo "
+╔═══════════════════════════════════╗
+║   RUNNING INTEGRATION TESTS       ║
+╚═══════════════════════════════════╝
+"
+
+dotnet husky run --name integration-test
 
 # dotnet husky run

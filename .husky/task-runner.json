@@ -9,6 +9,14 @@
             "command": "cmd",
             "args": ["/c", "echo Husky.Net is awesome!" ]
          }
+      },
+      {
+          "name": "unit-test",
+          "command": "dotnet test Tests.Unit/Tests.Unit.csproj"
+      },
+      {
+          "name": "integration-test",
+          "command": "dotnet test Tests.Integration/Tests.Integration.csproj"
       }
    ]
 }
