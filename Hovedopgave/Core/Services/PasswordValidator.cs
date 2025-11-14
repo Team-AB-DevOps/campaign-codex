@@ -41,9 +41,9 @@ public static class PasswordValidator
         }
         
         var content = await response.Content.ReadAsStringAsync();
-        var hashes = content.Split('\n').Select(l => l.Split(":")[0].Trim()).ToHashSet();
+        var hashes = content.Split('\n').Select(l => l.Split(":")[0].Trim()).ToList();
         
-        return hashes.Any(line => line.Equals(suffix, StringComparison.OrdinalIgnoreCase));
+        return hashes.Contains(suffix, StringComparer.OrdinalIgnoreCase);
     }
     
     private static string ComputeSha1Hash(string input)
