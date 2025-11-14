@@ -12,7 +12,8 @@
    cd campaign-codex
    ```
 
-2. Install Husky locally
+2. Restore .NET tools and install Husky locally
    ```bash
+   dotnet tool restore
    dotnet husky install
    ```
