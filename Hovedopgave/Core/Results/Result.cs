@@ -11,7 +11,8 @@ public class Result<T>
     {
         return new Result<T>
         {
-            IsSuccess = true, Value = value
+            IsSuccess = true,
+            Value = value
         };
     }
 
@@ -19,7 +20,9 @@ public class Result<T>
     {
         return new Result<T>
         {
-            IsSuccess = false, Error = error, Code = code
+            IsSuccess = false,
+            Error = error,
+            Code = code
         };
     }
 }

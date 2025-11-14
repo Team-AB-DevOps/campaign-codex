@@ -20,7 +20,7 @@ public static class PasswordValidator
                password.Any(char.IsDigit) &&
                password.Any(c => !char.IsLetterOrDigit(c));
     }
-    
+
     // Check if password has been pwned using the Have I Been Pwned API
     // Works by sending the first 5 characters of the SHA-1 hash of the password
     // and checking if the rest of the hash is in the response
@@ -34,18 +34,18 @@ public static class PasswordValidator
         var prefix = hashString.Substring(0, 5);
         var suffix = hashString.Substring(5);
         var response = await httpClient.GetAsync($"range/{prefix}");
-        
+
         if (!response.IsSuccessStatusCode)
         {
             throw new BadHttpRequestException($"Error checking password against Pwned Passwords API, {response.StatusCode}, {response.ReasonPhrase}, {await response.Content.ReadAsStringAsync()}");
         }
-        
+
         var content = await response.Content.ReadAsStringAsync();
         var hashes = content.Split('\n').Select(l => l.Split(":")[0].Trim()).ToList();
-        
+
         return hashes.Contains(suffix, StringComparer.OrdinalIgnoreCase);
     }
-    
+
     private static string ComputeSha1Hash(string input)
     {
         using var sha1 = System.Security.Cryptography.SHA1.Create();

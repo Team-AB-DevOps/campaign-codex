@@ -56,7 +56,7 @@ public class WikiService(
             ? Result<string>.Failure("Failed to create wiki entry", 400)
             : Result<string>.Success(entry.Id);
     }
-    
+
     public async Task<Result<List<WikiEntryDto>>> GetWikiEntriesForCampaign(string campaignId)
     {
         var campaign = await context.Campaigns

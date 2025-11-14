@@ -27,7 +27,7 @@ public class PwnedIntegrationTests
         // Assert
         Assert.True(isPwned);
     }
-    
+
 
     [Theory]
     [InlineData(1)]
@@ -44,12 +44,12 @@ public class PwnedIntegrationTests
     {
         // Arrange
         var password = GenerateRandomString();
-        
+
         // Act
         var isPwned = await PasswordValidator.IsPwned(password);
 
         // Assert
         Assert.False(isPwned);
     }
-    
+
 }

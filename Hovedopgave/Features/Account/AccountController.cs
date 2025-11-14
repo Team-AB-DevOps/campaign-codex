@@ -26,7 +26,7 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
             ModelState.AddModelError("Password", "Password is Pwned. Pick a more secure password.");
             return ValidationProblem();
         }
-        
+
         var user = new User
         {
             UserName = registerDto.Email,
@@ -57,14 +57,14 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
         {
             return NoContent();
         }
-    
+
         var user = await signInManager.UserManager.GetUserAsync(User);
-    
+
         if (user == null)
         {
             return Unauthorized();
         }
-    
+
         return Ok(new
         {
             user.DisplayName,

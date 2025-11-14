@@ -7,7 +7,7 @@ namespace Hovedopgave.Core.Controllers;
 [ApiController]
 public class BaseApiController : ControllerBase
 {
-    
+
     protected ActionResult HandleResult<T>(Result<T> result)
     {
         switch (result.IsSuccess)
