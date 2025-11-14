@@ -1,22 +1,32 @@
 {
-   "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
-   "tasks": [
-      {
-         "name": "welcome-message-example",
-         "command": "bash",
-         "args": [ "-c", "echo Husky.Net is awesome!" ],
-         "windows": {
-            "command": "cmd",
-            "args": ["/c", "echo Husky.Net is awesome!" ]
-         }
-      },
-      {
-          "name": "unit-test",
-          "command": "dotnet test Tests.Unit/Tests.Unit.csproj"
-      },
-      {
-          "name": "integration-test",
-          "command": "dotnet test Tests.Integration/Tests.Integration.csproj"
-      }
-   ]
+    "$schema": "https://alirezanet.github.io/Husky.Net/schema.json",
+    "tasks": [
+        {
+            "name": "welcome-message-example",
+            "command": "bash",
+            "args": ["-c", "echo Husky.Net is awesome!"],
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "echo Husky.Net is awesome!"]
+            }
+        },
+        {
+            "name": "unit-test",
+            "command": "bash",
+            "args": ["-c", "dotnet test Tests.Unit/Tests.Unit.csproj"],
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "dotnet test Tests.Unit/Tests.Unit.csproj"]
+            }
+        },
+        {
+            "name": "integration-test",
+            "command": "bash",
+            "args": ["-c", "dotnet test Tests.Integration/Tests.Integration.csproj"],
+            "windows": {
+                "command": "cmd",
+                "args": ["/c", "dotnet test Tests.Integration/Tests.Integration.csproj"]
+            }
+        }
+    ]
 }
