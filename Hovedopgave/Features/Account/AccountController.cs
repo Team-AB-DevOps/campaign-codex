@@ -20,6 +20,12 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
             ModelState.AddModelError("Password", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
             return ValidationProblem();
         }
+
+        if (await PasswordValidator.IsPwned(registerDto.Password))
+        {
+            ModelState.AddModelError("Password", "Password is Pwned. Pick a more secure password.");
+            return ValidationProblem();
+        }
         
         var user = new User
         {
