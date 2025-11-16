@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 
-namespace Tests.Integration;
+namespace Tests.Integration.Infrastructure;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
@@ -62,6 +62,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
             // Remove real UserAccessor
             var userAccessorDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IUserAccessor));
+
             if (userAccessorDescriptor is not null)
             {
                 services.Remove(userAccessorDescriptor);
@@ -75,7 +76,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
 public class TestUserAccessor : IUserAccessor
 {
-    public string UserId { get; set; } = Guid.NewGuid().ToString();
+    public string UserId { get; set; } = "randomId-1234-13134-1123";
 
     public Task<User> GetUserAsync()
     {
