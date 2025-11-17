@@ -1,4 +1,5 @@
 ﻿using Hovedopgave.Core.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests.Integration.Infrastructure;
@@ -27,8 +28,7 @@ public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppF
     {
         // Clean up test data after each test
         var characters = DbContext.Characters.ToList();
-        DbContext.Characters.RemoveRange(characters);
-        await DbContext.SaveChangesAsync();
+        await DbContext.Characters.ExecuteDeleteAsync();
 
         _scope.Dispose();
     }

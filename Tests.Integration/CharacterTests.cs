@@ -9,7 +9,6 @@ using Tests.Integration.Infrastructure;
 
 namespace Tests.Integration;
 
-[Collection("Integration")]
 public class CharacterTests(IntegrationTestWebAppFactory factory)
     : BaseIntegrationTest(factory)
 {
@@ -17,10 +16,10 @@ public class CharacterTests(IntegrationTestWebAppFactory factory)
     public async Task Create_Should_ReturnSuccess_When_CharacterIsCreated()
     {
         // Arrange
-        var testUserAccessor = ServiceProvider.GetRequiredService<IUserAccessor>() as TestUserAccessor;
+        var userAccessor = ServiceProvider.GetRequiredService<IUserAccessor>();
         var charactersService = ServiceProvider.GetRequiredService<ICharactersService>();
         var campaign = await DbContext.Campaigns.FirstAsync();
-        var userId = testUserAccessor!.UserId;
+        var userId = userAccessor.GetUserId();
 
         var characterDto = new CreateCharacterDto
         {
@@ -44,7 +43,7 @@ public class CharacterTests(IntegrationTestWebAppFactory factory)
     public async Task GetCharactersForCampaign_Should_ReturnCharacter_When_CharacterIsAddedToCampaign()
     {
         // Arrange
-        var testUserAccessor = ServiceProvider.GetRequiredService<IUserAccessor>() as TestUserAccessor;
+        var userAccessor = ServiceProvider.GetRequiredService<IUserAccessor>();
         var charactersService = ServiceProvider.GetRequiredService<ICharactersService>();
         var campaign = await DbContext.Campaigns.FirstAsync();
 
@@ -54,7 +53,7 @@ public class CharacterTests(IntegrationTestWebAppFactory factory)
             Race = CharacterRace.Dwarf,
             Class = CharacterClass.Fighter,
             Backstory = "Test backstory",
-            UserId = testUserAccessor!.UserId,
+            UserId = userAccessor.GetUserId(),
             CampaignId = campaign.Id
         };
 
@@ -73,10 +72,10 @@ public class CharacterTests(IntegrationTestWebAppFactory factory)
     public async Task UpdateCharacter_Should_ReturnSuccess_When_CharacterIsUpdated()
     {
         // Arrange
-        var testUserAccessor = ServiceProvider.GetRequiredService<IUserAccessor>() as TestUserAccessor;
+        var userAccessor = ServiceProvider.GetRequiredService<IUserAccessor>();
         var charactersService = ServiceProvider.GetRequiredService<ICharactersService>();
         var campaign = await DbContext.Campaigns.FirstAsync();
-        var userId = testUserAccessor!.UserId;
+        var userId = userAccessor.GetUserId();
 
         var createDto = new CreateCharacterDto
         {
@@ -112,7 +111,7 @@ public class CharacterTests(IntegrationTestWebAppFactory factory)
         // Verify the character was actually updated
         var updatedCharacter = await DbContext.Characters.FindAsync(characterId);
         updatedCharacter.Should().NotBeNull();
-        updatedCharacter!.Name.Should().Be("Updated name");
+        updatedCharacter.Name.Should().Be("Updated name");
         updatedCharacter.Backstory.Should().Be("Updated backstory");
     }
 
@@ -120,7 +119,7 @@ public class CharacterTests(IntegrationTestWebAppFactory factory)
     public async Task DeleteCharacter_Should_ReturnSuccess_When_CharacterIsDeleted()
     {
         // Arrange
-        var testUserAccessor = ServiceProvider.GetRequiredService<IUserAccessor>() as TestUserAccessor;
+        var userAccessor = ServiceProvider.GetRequiredService<IUserAccessor>();
         var charactersService = ServiceProvider.GetRequiredService<ICharactersService>();
         var campaign = await DbContext.Campaigns.FirstAsync();
 
@@ -130,7 +129,7 @@ public class CharacterTests(IntegrationTestWebAppFactory factory)
             Race = CharacterRace.Elf,
             Class = CharacterClass.Wizard,
             Backstory = "Will be deleted",
-            UserId = testUserAccessor!.UserId,
+            UserId = userAccessor.GetUserId(),
             CampaignId = campaign.Id
         };
         var createResult = await charactersService.CreateCharacter(createDto);

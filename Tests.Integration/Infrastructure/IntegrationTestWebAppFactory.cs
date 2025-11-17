@@ -34,9 +34,10 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         await DbInitializer.SeedData(context, userManager);
     }
 
-    public new Task DisposeAsync()
+    public new async Task DisposeAsync()
     {
-        return _dbContainer.StopAsync();
+        await _dbContainer.StopAsync();
+        await base.DisposeAsync();
     }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
@@ -84,29 +85,33 @@ public class TestUserAccessor : IUserAccessor
         _context = context;
     }
 
-    public string UserId
-    {
-        get
-        {
-            if (_cachedUserId == null)
-            {
-                _cachedUserId = _context.Users.First().Id;
-            }
-
-            return _cachedUserId;
-        }
-        set => _cachedUserId = value;
-    }
-
     public async Task<User> GetUserAsync()
     {
-        var userId = UserId;
+        var userId = GetUserId();
         var user = await _context.Users.FindAsync(userId);
-        return user ?? new User { Id = userId, UserName = "TestUser" };
+        
+        if (user == null)
+        {
+            throw new InvalidOperationException($"User with ID '{userId}' not found in the database.");
+        }
+
+        return user;
     }
 
     public string GetUserId()
     {
-        return UserId;
+        if (_cachedUserId == null)
+        {
+            var user = _context.Users.FirstOrDefault();
+            if (user == null)
+            {
+                throw new InvalidOperationException(
+                    "No users exist in the database. Ensure at least one user is seeded before accessing UserId.");
+            }
+
+            _cachedUserId = user.Id;
+        }
+
+        return _cachedUserId;
     }
 }
