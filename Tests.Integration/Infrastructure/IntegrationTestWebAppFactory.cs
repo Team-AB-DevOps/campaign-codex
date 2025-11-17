@@ -76,11 +76,33 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
 public class TestUserAccessor : IUserAccessor
 {
-    public string UserId { get; set; } = "randomId-1234-13134-1123";
+    private readonly AppDbContext _context;
+    private string? _cachedUserId;
 
-    public Task<User> GetUserAsync()
+    public TestUserAccessor(AppDbContext context)
     {
-        return Task.FromResult(new User { Id = UserId, UserName = "TestUser" });
+        _context = context;
+    }
+
+    public string UserId
+    {
+        get
+        {
+            if (_cachedUserId == null)
+            {
+                _cachedUserId = _context.Users.First().Id;
+            }
+
+            return _cachedUserId;
+        }
+        set => _cachedUserId = value;
+    }
+
+    public async Task<User> GetUserAsync()
+    {
+        var userId = UserId;
+        var user = await _context.Users.FindAsync(userId);
+        return user ?? new User { Id = userId, UserName = "TestUser" };
     }
 
     public string GetUserId()

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Tests.Integration.Infrastructure;
 
-public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>
+public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppFactory>, IAsyncLifetime
 {
     private readonly IServiceScope _scope;
     protected readonly AppDbContext DbContext;
@@ -16,5 +16,20 @@ public abstract class BaseIntegrationTest : IClassFixture<IntegrationTestWebAppF
         _scope = factory.Services.CreateScope();
         ServiceProvider = _scope.ServiceProvider;
         DbContext = ServiceProvider.GetRequiredService<AppDbContext>();
+    }
+
+    public virtual Task InitializeAsync()
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual async Task DisposeAsync()
+    {
+        // Clean up test data after each test
+        var characters = DbContext.Characters.ToList();
+        DbContext.Characters.RemoveRange(characters);
+        await DbContext.SaveChangesAsync();
+
+        _scope.Dispose();
     }
 }
