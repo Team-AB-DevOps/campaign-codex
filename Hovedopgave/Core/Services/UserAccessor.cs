@@ -20,5 +20,5 @@ public class UserAccessor(IHttpContextAccessor httpContextAccessor, AppDbContext
                ?? throw new Exception("No user found");
     }
 
-  
+
 }

@@ -124,6 +124,7 @@ try
 {
     var context = services.GetRequiredService<AppDbContext>();
     var userManager = services.GetRequiredService<UserManager<User>>();
+    await context.Database.EnsureDeletedAsync();
     await context.Database.MigrateAsync();
     await DbInitializer.SeedData(context, userManager);
 }
