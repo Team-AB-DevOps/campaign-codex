@@ -20,10 +20,10 @@ public class PasswordValidatorUnitTests
         // Assert
         result.Should().BeTrue();
     }
-    
+
     [Theory]
-    [InlineData("Ps1!")] 
-    [InlineData("Pas12!A")] 
+    [InlineData("Ps1!")]
+    [InlineData("Pas12!A")]
     [InlineData("IAmExactlyTooLong1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")]
     [InlineData("IAmWayTooLong1!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")]
     [InlineData("password1!")]
@@ -36,7 +36,7 @@ public class PasswordValidatorUnitTests
     [InlineData("")]
     [InlineData("         ")]
     [InlineData(null)]
-    public void IsValidate_Should_ReturnFalse_When_PasswordIsInvalid(string password)
+    public void IsValidate_Should_ReturnFalse_When_PasswordIsInvalid(string? password)
     {
         // Arrange & Act
         var result = PasswordValidator.IsValidate(password);

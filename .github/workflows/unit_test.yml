@@ -19,7 +19,7 @@ jobs:
         working-directory: ./Hovedopgave
         run: dotnet build Hovedopgave.csproj
 
-    #   - name: Run unit tests
-    #     run: dotnet test backend/backend.sln --filter "TestCategory=UnitTest"
+      - name: Run unit tests
+        run: dotnet test Tests.Unit/Tests.Unit.csproj
 
 
