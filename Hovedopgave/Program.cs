@@ -70,10 +70,10 @@ builder.Services.AddRateLimiter(options =>
 {
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
-            partitionKey: httpContext.User.Identity?.Name
-                          ?? httpContext.Connection.RemoteIpAddress?.ToString()
-                          ?? "unknown",
-            factory: partition => new FixedWindowRateLimiterOptions
+            httpContext.User.Identity?.Name
+            ?? httpContext.Connection.RemoteIpAddress?.ToString()
+            ?? "unknown",
+            partition => new FixedWindowRateLimiterOptions
             {
                 AutoReplenishment = true,
                 PermitLimit = 10,
@@ -135,3 +135,8 @@ catch (Exception ex)
 }
 
 app.Run();
+
+// Make the implicit Program class public for testing
+public partial class Program
+{
+}
