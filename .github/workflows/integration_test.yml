@@ -6,27 +6,6 @@ on:
 jobs:
   integration-tests:
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:16
-        env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpassword
-          POSTGRES_DB: GetAddress
-          POSTGRES_HOST_AUTH_METHOD: trust
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready -U testuser -d GetAddress"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
-    env:
-      # This is the connection string your tests will use
-      ConnectionStrings__Default: "Server=localhost;Port=5432;Database=GetAddress;userid=testuser;password=testpassword;SslMode=Disable;"
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v5
