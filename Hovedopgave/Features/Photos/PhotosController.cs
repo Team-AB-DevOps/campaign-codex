@@ -11,12 +11,12 @@ public class PhotosController(IPhotoService photoService) : BaseApiController
     public async Task<ActionResult<Photo>> AddCampaignPhoto(IFormFile file, string campaignId)
     {
         var result = await photoService.AddCampaignPhoto(file, campaignId);
-        
+
         if (!result.IsSuccess)
         {
             return BadRequest(result.Error);
         }
-        
+
         return Ok(result.Value);
     }
 
@@ -24,12 +24,12 @@ public class PhotosController(IPhotoService photoService) : BaseApiController
     public async Task<ActionResult<Photo>> AddWikiEntryPhoto(IFormFile file, string campaignId)
     {
         var result = await photoService.AddWikiEntryPhoto(file, campaignId);
-        
+
         if (!result.IsSuccess)
         {
             return BadRequest(result.Error);
         }
-        
+
         return Ok(result.Value);
     }
 
@@ -37,12 +37,12 @@ public class PhotosController(IPhotoService photoService) : BaseApiController
     public async Task<ActionResult<Photo>> AddCharacterPhoto(IFormFile file, string characterId)
     {
         var result = await photoService.AddCharacterPhoto(file, characterId);
-        
+
         if (!result.IsSuccess)
         {
             return BadRequest(result.Error);
         }
-        
+
         return Ok(result.Value);
     }
 }
