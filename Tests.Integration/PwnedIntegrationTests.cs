@@ -7,7 +7,7 @@ public class PwnedIntegrationTests
     private static string GenerateRandomString(int length = 30)
     {
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
-        var random = new Random();
+        var random = Random.Shared;
         return new string(Enumerable.Repeat(chars, length)
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
