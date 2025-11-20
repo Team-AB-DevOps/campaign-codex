@@ -14,17 +14,19 @@ public static class CloudinaryHelper
 
         return new FormFile(stream, 0, stream.Length, "file", fileName)
         {
-            Headers = new HeaderDictionary()
+            Headers = new HeaderDictionary(),
         };
     }
 
     public static IOptions<CloudinarySettings> CreateCloudinarySettingsFile()
     {
-        return Options.Create(new CloudinarySettings
-        {
-            CloudName = "dkcqshlp4",
-            ApiKey = "426284213378781",
-            ApiSecret = "WRaHhyJ4ta2kFKWKHjOrWWba4OA"
-        });
+        return Options.Create(
+            new CloudinarySettings
+            {
+                CloudName = "dkcqshlp4",
+                ApiKey = "426284213378781",
+                ApiSecret = "WRaHhyJ4ta2kFKWKHjOrWWba4OA",
+            }
+        );
     }
 }

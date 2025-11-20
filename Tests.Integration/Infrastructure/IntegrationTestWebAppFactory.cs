@@ -43,11 +43,16 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // Provide a dummy connection string to prevent Program.cs from throwing
-        builder.UseSetting("CONNECTION_STRING", "Host=dummy;Database=dummy;Username=dummy;Password=dummy");
+        builder.UseSetting(
+            "CONNECTION_STRING",
+            "Host=dummy;Database=dummy;Username=dummy;Password=dummy"
+        );
 
         builder.ConfigureTestServices(services =>
         {
-            var descriptor = services.SingleOrDefault(s => s.ServiceType == typeof(DbContextOptions<AppDbContext>));
+            var descriptor = services.SingleOrDefault(s =>
+                s.ServiceType == typeof(DbContextOptions<AppDbContext>)
+            );
 
             if (descriptor is not null)
             {
@@ -55,14 +60,14 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             }
 
             services.AddDbContext<AppDbContext>(options =>
-                {
-                    options
-                        .UseNpgsql(_dbContainer.GetConnectionString());
-                }
-            );
+            {
+                options.UseNpgsql(_dbContainer.GetConnectionString());
+            });
 
             // Remove real UserAccessor
-            var userAccessorDescriptor = services.SingleOrDefault(d => d.ServiceType == typeof(IUserAccessor));
+            var userAccessorDescriptor = services.SingleOrDefault(d =>
+                d.ServiceType == typeof(IUserAccessor)
+            );
 
             if (userAccessorDescriptor is not null)
             {
@@ -92,7 +97,9 @@ public class TestUserAccessor : IUserAccessor
 
         if (user == null)
         {
-            throw new InvalidOperationException($"User with ID '{userId}' not found in the database.");
+            throw new InvalidOperationException(
+                $"User with ID '{userId}' not found in the database."
+            );
         }
 
         return user;
@@ -106,7 +113,8 @@ public class TestUserAccessor : IUserAccessor
             if (user == null)
             {
                 throw new InvalidOperationException(
-                    "No users exist in the database. Ensure at least one user is seeded before accessing UserId.");
+                    "No users exist in the database. Ensure at least one user is seeded before accessing UserId."
+                );
             }
 
             _cachedUserId = user.Id;

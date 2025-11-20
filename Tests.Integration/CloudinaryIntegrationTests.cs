@@ -7,7 +7,6 @@ using Tests.Integration.Infrastructure;
 
 namespace Tests.Integration;
 
-
 [Trait("test", "cloudinary")]
 public class CloudinaryUploadTests : IAsyncLifetime
 {
