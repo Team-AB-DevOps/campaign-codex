@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hovedopgave.Core.Configuration;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 
 namespace Tests.Integration.Infrastructure;
 
@@ -14,5 +16,15 @@ public static class CloudinaryHelper
         {
             Headers = new HeaderDictionary()
         };
+    }
+
+    public static IOptions<CloudinarySettings> CreateCloudinarySettingsFile()
+    {
+        return Options.Create(new CloudinarySettings
+        {
+            CloudName = "dkcqshlp4",
+            ApiKey = "426284213378781",
+            ApiSecret = "WRaHhyJ4ta2kFKWKHjOrWWba4OA"
+        });
     }
 }

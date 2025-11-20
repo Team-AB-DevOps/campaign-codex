@@ -16,13 +16,7 @@ public class CloudinaryUploadTests : IAsyncLifetime
     
     public CloudinaryUploadTests()
     {
-        IOptions<CloudinarySettings> config = Options.Create(new CloudinarySettings
-        {
-            CloudName = "dkcqshlp4",
-            ApiKey = "426284213378781",
-            ApiSecret = "WRaHhyJ4ta2kFKWKHjOrWWba4OA"
-        });
-        
+        var config = CloudinaryHelper.CreateCloudinarySettingsFile();
         _cloudinaryService = new CloudinaryService(config);
     }
     
@@ -65,13 +59,7 @@ public class CloudinaryDeleteTests
     
     public CloudinaryDeleteTests()
     {
-        IOptions<CloudinarySettings> config = Options.Create(new CloudinarySettings
-        {
-            CloudName = "dkcqshlp4",
-            ApiKey = "426284213378781",
-            ApiSecret = "WRaHhyJ4ta2kFKWKHjOrWWba4OA"
-        });
-        
+        var config = CloudinaryHelper.CreateCloudinarySettingsFile();
         _cloudinaryService = new CloudinaryService(config);
     }
     
