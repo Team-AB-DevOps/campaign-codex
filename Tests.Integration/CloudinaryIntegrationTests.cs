@@ -11,7 +11,7 @@ namespace Tests.Integration;
 [Trait("test", "cloudinary")]
 public class CloudinaryUploadTests : IAsyncLifetime
 {
-    private string _cashedId = string.Empty;
+    private string _cachedId = string.Empty;
     private readonly CloudinaryService _cloudinaryService;
     
     public CloudinaryUploadTests()
@@ -33,7 +33,7 @@ public class CloudinaryUploadTests : IAsyncLifetime
     
     public async Task DisposeAsync()
     {
-        await _cloudinaryService.DeletePhoto(_cashedId);
+        await _cloudinaryService.DeletePhoto(_cachedId);
     }
     
     [Theory]
@@ -54,7 +54,7 @@ public class CloudinaryUploadTests : IAsyncLifetime
         result.Should().BeOfType<PhotoUploadResult>();
         result.PublicId.Should().NotBeNullOrEmpty();
         result.Url.Should().NotBeNullOrEmpty();
-        _cashedId = result.PublicId;
+        _cachedId = result.PublicId;
     }
 }
 
