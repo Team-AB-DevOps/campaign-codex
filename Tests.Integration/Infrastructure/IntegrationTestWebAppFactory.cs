@@ -89,7 +89,7 @@ public class TestUserAccessor : IUserAccessor
     {
         var userId = GetUserId();
         var user = await _context.Users.FindAsync(userId);
-        
+
         if (user == null)
         {
             throw new InvalidOperationException($"User with ID '{userId}' not found in the database.");

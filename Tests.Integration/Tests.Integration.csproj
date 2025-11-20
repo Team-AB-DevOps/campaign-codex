@@ -25,4 +25,10 @@
         <ProjectReference Include="..\Hovedopgave\Hovedopgave.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Update="mocks/**/*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
 </Project>
