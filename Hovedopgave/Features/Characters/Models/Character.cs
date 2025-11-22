@@ -1,4 +1,5 @@
-﻿using Hovedopgave.Features.Account.Models;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Hovedopgave.Features.Account.Models;
 using Hovedopgave.Features.Campaigns.Models;
 using Hovedopgave.Features.Photos.Models;
 
@@ -21,4 +22,7 @@ public class Character
 
     public string? PhotoId { get; set; }
     public Photo? Photo { get; set; }
+
+    [NotMapped]
+    public CharacterProgression Progression { get; set; } = new CharacterProgression();
 }
