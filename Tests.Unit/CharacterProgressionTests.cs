@@ -5,7 +5,6 @@ namespace Tests.Unit;
 
 public class CharacterProgressionTests
 {
-
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(32000)]
@@ -111,6 +110,4 @@ public class CharacterProgressionTests
         progression.Level.Should().Be(1);
         progression.ExperiencePoints.Should().Be(0);
     }
-
-
 }

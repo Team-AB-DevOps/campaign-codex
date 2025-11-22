@@ -13,16 +13,16 @@ public class CharacterProgression
     /// </summary>
     private static readonly int[] XpThresholds =
     [
-        0,      // Level 1
-        300,    // Level 2
-        900,    // Level 3
-        2700,   // Level 4
-        6500,   // Level 5
-        14000,  // Level 6
-        23000,  // Level 7
-        34000,  // Level 8
-        48000,  // Level 9
-        64000,  // Level 10
+        0, // Level 1
+        300, // Level 2
+        900, // Level 3
+        2700, // Level 4
+        6500, // Level 5
+        14000, // Level 6
+        23000, // Level 7
+        34000, // Level 8
+        48000, // Level 9
+        64000, // Level 10
     ];
 
     public const int MaxLevel = 10;
@@ -139,4 +139,3 @@ public class CharacterProgression
         return (double)xpInCurrentLevel / xpNeededForLevel * 100.0;
     }
 }
-

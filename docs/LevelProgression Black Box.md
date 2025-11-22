@@ -5,7 +5,7 @@
 A character starts at level 1 and is able to level up their character up to level 10 by gaining experience points. Once a threshold is passed, the character advances to the next level. The system uses predefined XP thresholds to determine the character's current level based on their total accumulated experience points. The XP thresholds are defined as:
 
 | Level | Experience Points |
-| ----- | ----------------- |
+|-------|-------------------|
 | 1     | 0                 |
 | 2     | 300               |
 | 3     | 900               |
@@ -22,7 +22,7 @@ A character starts at level 1 and is able to level up their character up to leve
 ### Equivalence Partitioning
 
 | Partition ID | Partitions            | Type    | Description                          | Test case values |
-| ------------ | --------------------- | ------- | ------------------------------------ | ---------------- |
+|--------------|-----------------------|---------|--------------------------------------|------------------|
 | P1           | 0 - 64000             | Valid   | Between lvl 1 and 10                 | 32000            |
 | P2           | NEGATIVE MAX INT - -1 | Invalid | Can not be under lvl 1               | -1000            |
 | P3           | 64001 - MAX INT       | Valid   | Can not be over lvl 10, but no error | 100000           |
@@ -30,7 +30,7 @@ A character starts at level 1 and is able to level up their character up to leve
 ### 3-value Boundary Value Analysis
 
 | Partition ID | Partition types | Partitions            | Boundary values | Test case values         |
-| ------------ | --------------- | --------------------- | --------------- | ------------------------ |
+|--------------|-----------------|-----------------------|-----------------|--------------------------|
 | P1           | Valid           | 0 - 64000             | 0 64000         | -1 0 1 63999 64000 64001 |
 | P2           | Invalid         | NEGATIVE MAX INT - -1 | -1              | -2 -1 0                  |
 | P3           | Valid           | 64001 - MAX INT       | 64001           | 64000 64001 64002        |
@@ -44,7 +44,7 @@ A character starts at level 1 and is able to level up their character up to leve
 ### Equivalence Partitioning
 
 | Partition ID | Partitions      | Type  | Description | Test case values |
-| ------------ | --------------- | ----- | ----------- | ---------------- |
+|--------------|-----------------|-------|-------------|------------------|
 | P1           | 0 - 299         | Valid | Level 1     | 150              |
 | P2           | 300 - 899       | Valid | Level 2     | 600              |
 | P3           | 900 - 2699      | Valid | Level 3     | 1700             |
@@ -59,7 +59,7 @@ A character starts at level 1 and is able to level up their character up to leve
 ### 3-value Boundary Value Analysis
 
 | Partition ID | Partitions types | Partitions      | Boundary values | Test case values                    |
-| ------------ | ---------------- | --------------- | --------------- | ----------------------------------- |
+|--------------|------------------|-----------------|-----------------|-------------------------------------|
 | P1           | Valid            | 0 - 299         | 0 299           | -1 0 1 298 299 300                  |
 | P2           | Valid            | 300 - 899       | 300 899         | 299 300 301 898 899 900             |
 | P3           | Valid            | 900 - 2699      | 900 2699        | 899 900 901 2698 2699 2700          |
