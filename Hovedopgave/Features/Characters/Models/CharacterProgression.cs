@@ -64,7 +64,7 @@ public class CharacterProgression
 
         return levelsGained;
     }
-    
+
     public int RemoveExperience(int xp)
     {
         if (xp < 0)
@@ -108,7 +108,7 @@ public class CharacterProgression
         {
             return false;
         }
-        
+
         return ExperiencePoints < XpThresholds[Level - 1];
     }
 
@@ -140,4 +140,3 @@ public class CharacterProgression
     }
 }
 
- 

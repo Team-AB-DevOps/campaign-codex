@@ -22,7 +22,7 @@ public class Character
 
     public string? PhotoId { get; set; }
     public Photo? Photo { get; set; }
-    
+
     [NotMapped]
     public CharacterProgression Progression { get; set; } = new CharacterProgression();
 }
