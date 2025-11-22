@@ -47,6 +47,7 @@ export default function CampaignListCard({ campaign }: Props) {
                 <div className='flex items-start justify-between'>
                     {isDM && (
                         <Trash
+                            aria-label='Delete campaign'
                             className='absolute top-2 right-2 cursor-pointer rounded-full bg-stone-600 p-2 text-yellow-100 transition-all hover:text-red-400'
                             onClick={(e) => {
                                 e.preventDefault();
