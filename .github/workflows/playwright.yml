@@ -50,5 +50,5 @@ jobs:
               if: ${{ !cancelled() }}
               with:
                   name: playwright-report
-                  path: Hoofdopgave/client/playwright-report/
+                  path: Hovedopgave/client/playwright-report/
                   retention-days: 30
