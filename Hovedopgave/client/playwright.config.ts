@@ -33,7 +33,8 @@ export default defineConfig({
         trace: 'on-first-retry',
 
         launchOptions: {
-            slowMo: 500, // 500ms delay between each action
+            // Only enable slowMo for debugging purposes
+            slowMo: process.env.PLAYWRIGHT_DEBUG ? 500 : 0,
         },
     },
 
