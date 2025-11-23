@@ -35,8 +35,9 @@ builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddTransient<ExceptionMiddleware>();
 builder.Services.AddScoped<IUserAccessor, UserAccessor>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
-builder.Services.Configure<CloudinarySettings>(builder.Configuration
-    .GetSection("CloudinarySettings"));
+builder.Services.Configure<CloudinarySettings>(
+    builder.Configuration.GetSection("CloudinarySettings")
+);
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 builder.Services.AddScoped<ICampaignService, CampaignService>();
 builder.Services.AddScoped<IPhotoService, PhotoService>();
@@ -44,42 +45,52 @@ builder.Services.AddScoped<IWikiService, WikiService>();
 builder.Services.AddScoped<ICharactersService, CharactersService>();
 builder.Services.AddScoped<INotesService, NotesService>();
 
-
 // Postgres for dev og prod
 var connectionString = builder.Configuration.GetValue<string>("CONNECTION_STRING");
 if (string.IsNullOrEmpty(connectionString))
 {
     throw new InvalidOperationException(
-        "Connection string not found. Ensure the .env file is correctly configured and placed in the root directory.");
+        "Connection string not found. Ensure the .env file is correctly configured and placed in the root directory."
+    );
 }
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connectionString));
 
-builder.Services.AddIdentityApiEndpoints<User>(opt => { opt.User.RequireUniqueEmail = true; })
+builder
+    .Services.AddIdentityApiEndpoints<User>(opt =>
+    {
+        opt.User.RequireUniqueEmail = true;
+    })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-builder.Services.AddControllers(opt =>
-{
-    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-    opt.Filters.Add(new AuthorizeFilter(policy));
-}).AddJsonOptions(opt => { opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+builder
+    .Services.AddControllers(opt =>
+    {
+        var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+        opt.Filters.Add(new AuthorizeFilter(policy));
+    })
+    .AddJsonOptions(opt =>
+    {
+        opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddRateLimiter(options =>
 {
     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
         RateLimitPartition.GetFixedWindowLimiter(
             httpContext.User.Identity?.Name
-            ?? httpContext.Connection.RemoteIpAddress?.ToString()
-            ?? "unknown",
+                ?? httpContext.Connection.RemoteIpAddress?.ToString()
+                ?? "unknown",
             partition => new FixedWindowRateLimiterOptions
             {
                 AutoReplenishment = true,
-                PermitLimit = 10,
+                PermitLimit = 50,
                 QueueLimit = 0,
-                Window = TimeSpan.FromSeconds(10)
-            }));
+                Window = TimeSpan.FromSeconds(10),
+            }
+        )
+    );
 });
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -95,14 +106,17 @@ app.UseCors(opt =>
     opt.AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials()
-        .WithOrigins("http://localhost:3000", "http://localhost", "http://46.224.39.173"));
-
+        .WithOrigins("http://localhost:3000", "http://localhost", "http://46.224.39.173")
+);
 
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 
-    app.UseSwaggerUI(options => { options.SwaggerEndpoint("/openapi/v1.json", "Hovedopgave API"); });
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/openapi/v1.json", "Hovedopgave API");
+    });
 }
 
 // app.UseHttpsRedirection();
@@ -114,7 +128,6 @@ app.UseRateLimiter();
 
 app.MapControllers();
 app.MapGroup("api").MapIdentityApi<User>(); // Set up the identity API endpoints
-
 
 // Seed data
 using var scope = app.Services.CreateScope();
@@ -137,6 +150,4 @@ catch (Exception ex)
 app.Run();
 
 // Make the implicit Program class public for testing
-public partial class Program
-{
-}
+public partial class Program { }
