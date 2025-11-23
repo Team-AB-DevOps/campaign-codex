@@ -15,7 +15,6 @@ test('should complete full player workflow from login, create character, find wi
     // Create character
     await page.getByRole('link', { name: 'Storm Watch DM: Frederik' }).click();
     await expect(page.getByRole('navigation')).toContainText('Player');
-    await expect(page.getByRole('navigation')).toContainText('Player');
     await page.getByRole('link', { name: 'Players' }).click();
     await page.getByRole('button', { name: 'Create Character' }).click();
     await page.getByRole('textbox', { name: 'Name' }).fill('Gimli');
