@@ -22,6 +22,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      - name: Set deployment URL output
+        id: set-url
+        run: echo "url=${{ secrets.VITE_API_URL }}" >> $GITHUB_OUTPUT
+
       - name: Executing remote SSH commands
         uses: appleboy/ssh-action@v1.2.2
         env:
@@ -71,3 +75,12 @@ jobs:
 
             echo "Build containers"
             sudo docker compose --env-file .env up -d
+    outputs:
+      deployment_url: ${{ steps.set-url.outputs.url }}
+
+  e2e-tests:
+    name: Run Playwright E2E Tests
+    needs: deploy-containers
+    uses: ./.github/workflows/playwright.yml
+    with:
+      base_url: ${{ needs.deploy-containers.outputs.deployment_url }}

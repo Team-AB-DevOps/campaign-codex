@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 test('should complete full dungeon master workflow from login, create campaign, upload map, add player, add wiki entry, edit notes', async ({
     page,
 }) => {
-    await page.goto('http://localhost:3000/');
+    await page.goto('/');
     await page.getByRole('button', { name: 'To site' }).click();
     await page.getByRole('textbox', { name: 'Email' }).click();
     await page.getByRole('textbox', { name: 'Email' }).fill('brian@test.com');
@@ -41,7 +41,7 @@ test('should complete full dungeon master workflow from login, create campaign, 
 
     // Wait for the image upload to complete and the map to load
     await expect(page.locator('#root')).toContainText('Double Click: Add pin', {
-        timeout: 10000,
+        timeout: 30000,
     });
     await page.getByRole('link', { name: 'Players' }).click();
     await expect(page.locator('#root')).toContainText(
