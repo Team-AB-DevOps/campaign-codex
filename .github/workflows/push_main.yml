@@ -75,6 +75,18 @@ jobs:
 
             echo "Build containers"
             sudo docker compose --env-file .env up -d
+
+            echo "Waiting for application to be ready..."
+            for i in {1..30}; do
+              if curl -s -f "$VITE_API_URL" > /dev/null; then
+                echo "Application is ready!"
+                exit 0
+              fi
+              echo "Attempt $i: Application not ready yet..."
+              sleep 10
+            done
+            echo "Timeout waiting for application to be ready."
+            exit 1
     outputs:
       deployment_url: ${{ steps.set-url.outputs.url }}
 
