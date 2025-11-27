@@ -65,8 +65,9 @@ public class PasswordValidatorUnitTests
     [InlineData(" Abcdef1!")]
     [InlineData("Abcdef1! ")]
     [InlineData("ABCD123!")]
-    
-    public void IsValidate_Should_ReturnFalse_When_PasswordMissingRequiredCharacters(string password)
+    public void IsValidate_Should_ReturnFalse_When_PasswordMissingRequiredCharacters(
+        string password
+    )
     {
         // Act
         var result = PasswordValidator.IsValidate(password);

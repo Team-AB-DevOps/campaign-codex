@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Hovedopgave.Core.Services;
 
@@ -26,10 +25,10 @@ public static class PasswordValidator
             return false;
         }
 
-        return password.Any(char.IsUpper) &&
-               password.Any(char.IsLower) &&
-               password.Any(char.IsDigit) &&
-               password.Any(c => !char.IsLetterOrDigit(c));
+        return password.Any(char.IsUpper)
+            && password.Any(char.IsLower)
+            && password.Any(char.IsDigit)
+            && password.Any(c => !char.IsLetterOrDigit(c));
     }
 
     // Check if password has been pwned using the Have I Been Pwned API
@@ -38,7 +37,7 @@ public static class PasswordValidator
     public static async Task<bool> IsPwned(string password)
     {
         using var httpClient = new HttpClient();
-        
+
         httpClient.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
         var hashString = ComputeSha1Hash(password);
         var prefix = hashString.Substring(0, 5);
@@ -47,7 +46,9 @@ public static class PasswordValidator
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new BadHttpRequestException($"Error checking password against Pwned Passwords API, {response.StatusCode}, {response.ReasonPhrase}, {await response.Content.ReadAsStringAsync()}");
+            throw new BadHttpRequestException(
+                $"Error checking password against Pwned Passwords API, {response.StatusCode}, {response.ReasonPhrase}, {await response.Content.ReadAsStringAsync()}"
+            );
         }
 
         var content = await response.Content.ReadAsStringAsync();
