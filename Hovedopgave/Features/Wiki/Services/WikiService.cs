@@ -145,7 +145,7 @@ public class WikiService(
         var wikiEntry = await context.WikiEntries
             .Where(x => x.Id == entryId)
             .Include(x => x.Photo)
-            .FirstAsync();
+            .FirstOrDefaultAsync();
 
         if (wikiEntry is null)
         {

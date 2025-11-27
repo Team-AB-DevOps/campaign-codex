@@ -40,7 +40,7 @@ public class WikiController(IWikiService wikiService) : BaseApiController
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Error);
+            return NotFound(result.Error);
         }
 
         return Ok(result.Value);
