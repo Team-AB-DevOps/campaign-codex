@@ -64,6 +64,16 @@ builder
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
+// Configure cookie settings for CSRF protection
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest
+        : CookieSecurePolicy.Always;
+});
+
 builder
     .Services.AddControllers(opt =>
     {
@@ -119,7 +129,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// app.UseHttpsRedirection();
+// Enable HTTPS redirection in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
