@@ -10,7 +10,18 @@ public static class PasswordValidator
 
     public static bool IsValidate(string password)
     {
-        if (string.IsNullOrEmpty(password) || password.Length < MinLength || password.Length > MaxLength)
+        if (string.IsNullOrEmpty(password))
+        {
+            return false;
+        }
+
+        // Passwords with leading or trailing spaces are invalid
+        if (password != password.Trim())
+        {
+            return false;
+        }
+
+        if (password.Length < MinLength || password.Length > MaxLength)
         {
             return false;
         }
@@ -26,10 +37,9 @@ public static class PasswordValidator
     // and checking if the rest of the hash is in the response
     public static async Task<bool> IsPwned(string password)
     {
-        using var httpClient = new HttpClient()
-        {
-            BaseAddress = new Uri("https://api.pwnedpasswords.com/")
-        };
+        using var httpClient = new HttpClient();
+        
+        httpClient.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
         var hashString = ComputeSha1Hash(password);
         var prefix = hashString.Substring(0, 5);
         var suffix = hashString.Substring(5);
