@@ -8,7 +8,9 @@ namespace Hovedopgave.Features.Wiki;
 public class WikiController(IWikiService wikiService) : BaseApiController
 {
     [HttpPost]
-    public async Task<ActionResult<string>> CreateWikiEntry([FromBody] CreateWikiEntryDto wikiEntryDto)
+    public async Task<ActionResult<string>> CreateWikiEntry(
+        [FromBody] CreateWikiEntryDto wikiEntryDto
+    )
     {
         var result = await wikiService.CreateWikiEntry(wikiEntryDto);
 
@@ -40,12 +42,11 @@ public class WikiController(IWikiService wikiService) : BaseApiController
 
         if (!result.IsSuccess)
         {
-            return BadRequest(result.Error);
+            return NotFound(result.Error);
         }
 
         return Ok(result.Value);
     }
-
 
     [HttpDelete("{wikiEntryId}")]
     public async Task<ActionResult<string>> DeleteWikiEntry(string wikiEntryId)
