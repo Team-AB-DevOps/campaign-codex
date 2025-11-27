@@ -14,20 +14,24 @@ public class WikiService(
     AppDbContext context,
     IUserAccessor userAccessor,
     IMapper mapper,
-    ICloudinaryService cloudinaryService) : IWikiService
+    ICloudinaryService cloudinaryService
+) : IWikiService
 {
     public async Task<Result<string>> CreateWikiEntry(CreateWikiEntryDto wikiEntryDto)
     {
         var user = await userAccessor.GetUserAsync();
 
-        var campaign = await context.Campaigns
-            .Where(x => x.Id == wikiEntryDto.CampaignId && x.DungeonMaster.Id == user.Id)
+        var campaign = await context
+            .Campaigns.Where(x => x.Id == wikiEntryDto.CampaignId && x.DungeonMaster.Id == user.Id)
             .Include(x => x.Users)
             .FirstOrDefaultAsync();
 
         if (campaign == null)
         {
-            return Result<string>.Failure("Failed to find campaign with id or you are not the DM", 400);
+            return Result<string>.Failure(
+                "Failed to find campaign with id or you are not the DM",
+                400
+            );
         }
 
         var entry = mapper.Map<WikiEntry>(wikiEntryDto);
@@ -39,8 +43,8 @@ public class WikiService(
 
         if (!string.IsNullOrEmpty(wikiEntryDto.PhotoId))
         {
-            var photo = await context.Photos
-                .Where(x => x.Id == wikiEntryDto.PhotoId)
+            var photo = await context
+                .Photos.Where(x => x.Id == wikiEntryDto.PhotoId)
                 .FirstOrDefaultAsync();
             if (photo != null)
             {
@@ -59,17 +63,18 @@ public class WikiService(
 
     public async Task<Result<List<WikiEntryDto>>> GetWikiEntriesForCampaign(string campaignId)
     {
-        var campaign = await context.Campaigns
-            .Where(x => x.Id == campaignId)
-            .FirstOrDefaultAsync();
+        var campaign = await context.Campaigns.Where(x => x.Id == campaignId).FirstOrDefaultAsync();
 
         if (campaign == null)
         {
-            return Result<List<WikiEntryDto>>.Failure($"Failed to find campaign with id: {campaignId}", 404);
+            return Result<List<WikiEntryDto>>.Failure(
+                $"Failed to find campaign with id: {campaignId}",
+                404
+            );
         }
 
-        var wikiEntries = await context.WikiEntries
-            .Where(x => x.CampaignId == campaignId)
+        var wikiEntries = await context
+            .WikiEntries.Where(x => x.CampaignId == campaignId)
             .Include(x => x.Photo)
             .ToListAsync();
 
@@ -80,8 +85,8 @@ public class WikiService(
     {
         var user = await userAccessor.GetUserAsync();
 
-        var entry = await context.WikiEntries
-            .Include(x => x.Photo)
+        var entry = await context
+            .WikiEntries.Include(x => x.Photo)
             .Include(x => x.Campaign.DungeonMaster)
             .Where(x => x.Id == wikiEntryId)
             .FirstOrDefaultAsync();
@@ -142,8 +147,8 @@ public class WikiService(
 
     public async Task<Result<WikiEntryDto>> GetWikiEntry(string entryId)
     {
-        var wikiEntry = await context.WikiEntries
-            .Where(x => x.Id == entryId)
+        var wikiEntry = await context
+            .WikiEntries.Where(x => x.Id == entryId)
             .Include(x => x.Photo)
             .FirstOrDefaultAsync();
 
