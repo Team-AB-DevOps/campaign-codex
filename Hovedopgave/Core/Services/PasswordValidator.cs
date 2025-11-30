@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Hovedopgave.Core.Services;
 
@@ -10,15 +9,26 @@ public static class PasswordValidator
 
     public static bool IsValidate(string password)
     {
-        if (string.IsNullOrEmpty(password) || password.Length < MinLength || password.Length > MaxLength)
+        if (string.IsNullOrEmpty(password))
         {
             return false;
         }
 
-        return password.Any(char.IsUpper) &&
-               password.Any(char.IsLower) &&
-               password.Any(char.IsDigit) &&
-               password.Any(c => !char.IsLetterOrDigit(c));
+        // Passwords with leading or trailing spaces are invalid
+        if (password != password.Trim())
+        {
+            return false;
+        }
+
+        if (password.Length < MinLength || password.Length > MaxLength)
+        {
+            return false;
+        }
+
+        return password.Any(char.IsUpper)
+            && password.Any(char.IsLower)
+            && password.Any(char.IsDigit)
+            && password.Any(c => !char.IsLetterOrDigit(c));
     }
 
     // Check if password has been pwned using the Have I Been Pwned API
@@ -26,10 +36,9 @@ public static class PasswordValidator
     // and checking if the rest of the hash is in the response
     public static async Task<bool> IsPwned(string password)
     {
-        using var httpClient = new HttpClient()
-        {
-            BaseAddress = new Uri("https://api.pwnedpasswords.com/")
-        };
+        using var httpClient = new HttpClient();
+
+        httpClient.BaseAddress = new Uri("https://api.pwnedpasswords.com/");
         var hashString = ComputeSha1Hash(password);
         var prefix = hashString.Substring(0, 5);
         var suffix = hashString.Substring(5);
@@ -37,7 +46,9 @@ public static class PasswordValidator
 
         if (!response.IsSuccessStatusCode)
         {
-            throw new BadHttpRequestException($"Error checking password against Pwned Passwords API, {response.StatusCode}, {response.ReasonPhrase}, {await response.Content.ReadAsStringAsync()}");
+            throw new BadHttpRequestException(
+                $"Error checking password against Pwned Passwords API, {response.StatusCode}, {response.ReasonPhrase}, {await response.Content.ReadAsStringAsync()}"
+            );
         }
 
         var content = await response.Content.ReadAsStringAsync();
