@@ -150,11 +150,18 @@ var response = env.IsDevelopment()
 
 ## ⚠️ Security Risks & Recommendations
 
-### 1. **CRITICAL: Exposed API Secrets in Configuration** 🔴
+### 1. **CRITICAL: Exposed API Secrets in Configuration** 🔴 (PARTIALLY ADDRESSED)
 
-**Risk Level:** CRITICAL
+**Risk Level:** CRITICAL → MEDIUM
 
-**Issue:** Cloudinary API credentials are hardcoded in `appsettings.json`:
+**Progress Made:**
+
+-   ✅ `.env` files are now in `.gitignore` - secrets won't be committed
+-   ✅ Environment variables support added via `DotNetEnv` package
+-   ✅ `.env.sample` and `.env_sample` template files provided for developers
+-   ✅ Connection string moved to environment variables
+
+**Remaining Issue:** Cloudinary API credentials are still hardcoded in `appsettings.json`:
 
 ```json
 "CloudinarySettings": {
@@ -170,36 +177,29 @@ var response = env.IsDevelopment()
 -   Delete existing photos
 -   Incur costs on your account
 
-**Recommendation:**
+**Remaining Recommendations:**
 
 1. **Immediately rotate the Cloudinary API credentials**
-2. Move secrets to environment variables or a secrets manager
-3. Add `appsettings.json` to `.gitignore` (use `appsettings.Development.json.template` instead)
-4. Use Azure Key Vault, AWS Secrets Manager, or similar in production
+2. Move Cloudinary settings to environment variables (the `.env_sample` already has placeholders)
+3. Remove hardcoded values from `appsettings.json`
 
 ---
 
-### 2. **HIGH: HTTPS Not Enforced** 🟠
+### 2. ~~**HIGH: HTTPS Not Enforced**~~ ✅ RESOLVED
 
-**Risk Level:** HIGH
+**Status:** IMPLEMENTED
 
-**Issue:** HTTPS redirection is commented out in `Program.cs`:
+**Implementation:** HTTPS redirection is now enabled for production environments in `Program.cs` lines 116-119:
 
 ```csharp
-// app.UseHttpsRedirection();
+// Enable HTTPS redirection in production
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 ```
 
-**Impact:**
-
--   Data transmitted over HTTP can be intercepted (man-in-the-middle attacks)
--   Session cookies can be stolen
--   Credentials can be captured in transit
-
-**Recommendation:**
-
-1. Enable `app.UseHttpsRedirection();`
-2. Configure HSTS headers
-3. Ensure SSL certificates are properly configured
+**Note:** HTTPS is disabled in development for local testing convenience, but is enforced in production environments.
 
 ---
 
@@ -249,35 +249,42 @@ public async Task<PhotoUploadResult?> UploadPhoto(IFormFile file)
 
 ---
 
-### 4. **MEDIUM: Missing Anti-Forgery Tokens (CSRF)** 🟡
+### 4. ~~**MEDIUM: Missing Anti-Forgery Tokens (CSRF)**~~ ✅ RESOLVED
 
-**Risk Level:** MEDIUM
+**Status:** IMPLEMENTED
 
-**Issue:** No CSRF protection implemented for state-changing operations.
+**Implementation:** CSRF protection has been implemented via secure cookie configuration in `Program.cs` lines 67-75:
 
-**Impact:**
+```csharp
+// Configure cookie settings for CSRF protection
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest
+        : CookieSecurePolicy.Always;
+});
+```
 
--   Attackers could trick authenticated users into performing unwanted actions
--   Cross-site request forgery attacks possible
+**Defenses Applied:**
 
-**Recommendation:**
-
-1. Implement anti-forgery tokens for API endpoints
-2. Use `SameSite` cookie attribute (set to `Strict` or `Lax`)
-3. Consider implementing custom CSRF middleware for APIs
+-   `SameSite=Strict` prevents cookies from being sent with cross-origin requests
+-   `HttpOnly` prevents JavaScript access to cookies
+-   `SecurePolicy=Always` in production ensures cookies are only sent over HTTPS
 
 ---
 
-### 5. **MEDIUM: Password Validation Mismatch (Frontend vs Backend)** 🟡
+### 5. ~~**MEDIUM: Password Validation Mismatch (Frontend vs Backend)**~~ ✅ RESOLVED
 
-**Risk Level:** MEDIUM
+**Status:** FIXED
 
-**Issue:** Frontend allows 6-character passwords, backend requires 8:
+**Implementation:** Frontend and backend password validation are now synchronized.
 
 **Frontend (`registerSchema.ts`):**
 
 ```typescript
-password: z.string().min(6, 'Password must be at least 6 characters'),
+password: z.string().min(8, 'Password must be at least 8 characters'),
 ```
 
 **Backend (`PasswordValidator.cs`):**
@@ -286,15 +293,7 @@ password: z.string().min(6, 'Password must be at least 6 characters'),
 private const int MinLength = 8;
 ```
 
-**Impact:**
-
--   User confusion when passwords are rejected
--   Potential for weaker passwords if validation differs
-
-**Recommendation:**
-
-1. Sync validation rules between frontend and backend
-2. Consider implementing shared validation contracts
+Both now require a minimum of 8 characters for passwords.
 
 ---
 
@@ -424,39 +423,40 @@ await context.Database.MigrateAsync();
 
 ## Security Checklist Summary
 
-| Category               | Status | Notes                            |
-| ---------------------- | ------ | -------------------------------- |
-| Authentication         | ✅     | ASP.NET Core Identity            |
-| Authorization          | ✅     | Global policy + ownership checks |
-| Password Security      | ✅     | Complexity + HIBP check          |
-| XSS Prevention         | ✅     | HTML Sanitizer                   |
-| SQL Injection          | ✅     | EF Core ORM                      |
-| Rate Limiting          | ✅     | 50 req/10 sec                    |
-| CORS                   | ✅     | Configured with specific origins |
-| Secrets Management     | ❌     | Credentials in config file       |
-| HTTPS                  | ❌     | Disabled                         |
-| File Upload Validation | ⚠️     | Partial - size only              |
-| CSRF Protection        | ❌     | Not implemented                  |
-| Security Headers       | ❌     | Not configured                   |
-| Input Validation       | ⚠️     | Partial - no length limits       |
-| Error Handling         | ✅     | Environment-aware                |
-| Logging                | ✅     | Serilog configured               |
+| Category               | Status | Notes                                                          |
+| ---------------------- | ------ | -------------------------------------------------------------- |
+| Authentication         | ✅     | ASP.NET Core Identity                                          |
+| Authorization          | ✅     | Global policy + ownership checks                               |
+| Password Security      | ✅     | Complexity + HIBP check + synced validation                    |
+| XSS Prevention         | ✅     | HTML Sanitizer                                                 |
+| SQL Injection          | ✅     | EF Core ORM                                                    |
+| Rate Limiting          | ✅     | 50 req/10 sec                                                  |
+| CORS                   | ✅     | Configured with specific origins                               |
+| Secrets Management     | ⚠️     | Partial - .env in gitignore, but appsettings still has secrets |
+| HTTPS                  | ✅     | Enabled in production                                          |
+| File Upload Validation | ⚠️     | Partial - size only                                            |
+| CSRF Protection        | ✅     | SameSite=Strict + HttpOnly + SecurePolicy                      |
+| Security Headers       | ❌     | Not configured                                                 |
+| Input Validation       | ⚠️     | Partial - no length limits                                     |
+| Error Handling         | ✅     | Environment-aware                                              |
+| Logging                | ✅     | Serilog configured                                             |
 
 ---
 
 ## Priority Action Items
 
-1. **IMMEDIATE:** Rotate and secure Cloudinary API credentials
-2. **HIGH:** Enable HTTPS redirection
+1. **IMMEDIATE:** Rotate and secure Cloudinary API credentials (move to environment variables)
+2. ~~**HIGH:** Enable HTTPS redirection~~ ✅ DONE
 3. **HIGH:** Implement file upload validation (type, size, content)
-4. **MEDIUM:** Add CSRF protection
+4. ~~**MEDIUM:** Add CSRF protection~~ ✅ DONE (SameSite=Strict cookies)
 5. **MEDIUM:** Configure security headers
-6. **MEDIUM:** Sync frontend/backend password validation
+6. ~~**MEDIUM:** Sync frontend/backend password validation~~ ✅ DONE
 7. **LOW:** Add input length validation to DTOs
 8. **LOW:** Configure environment-specific logging levels
 9. **LOW:** Guard database seeding for development only
 
 ---
 
-_Analysis Date: November 27, 2025_
+_Initial Analysis Date: November 27, 2025_
+_Last Updated: November 30, 2025_
 _Analyzed by: GitHub Copilot_
