@@ -13,6 +13,7 @@ using Hovedopgave.Features.Characters.Services;
 using Hovedopgave.Features.Notes.Services;
 using Hovedopgave.Features.Photos.Services;
 using Hovedopgave.Features.Wiki.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -64,12 +65,19 @@ builder
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-// Configure cookie settings for CSRF protection
-builder.Services.ConfigureApplicationCookie(options =>
+// Configure cookie settings - must be after AddIdentityApiEndpoints
+builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Lax; // Use Lax for same-site 
+    options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest; // Allow HTTP for testing
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
+
+builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.BearerScheme, options =>
+{
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
 builder
