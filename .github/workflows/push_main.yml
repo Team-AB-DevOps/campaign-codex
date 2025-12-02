@@ -1,9 +1,10 @@
 name: Merge to Main
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+  # push:
+  #   branches:
+  #     - main
 
 jobs:
   unit-tests:
@@ -81,11 +82,11 @@ jobs:
       deployment_url: ${{ steps.set-url.outputs.url }}
       api_host: ${{ steps.set-url.outputs.api_host }}
 
-  # postman-api-tests:
-  #   name: API testing with Postman CLI
-  #   needs: deploy-containers
-  #   uses: ./.github/workflows/postman_api_test.yml
-  #   secrets: inherit
+  postman-api-tests:
+    name: API testing with Postman CLI
+    needs: deploy-containers
+    uses: ./.github/workflows/postman_api_test.yml
+    secrets: inherit
 
   # e2e-tests:
   #   name: Run Playwright E2E Tests
