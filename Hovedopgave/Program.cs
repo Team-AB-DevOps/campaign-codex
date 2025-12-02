@@ -13,6 +13,7 @@ using Hovedopgave.Features.Characters.Services;
 using Hovedopgave.Features.Notes.Services;
 using Hovedopgave.Features.Photos.Services;
 using Hovedopgave.Features.Wiki.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -64,14 +65,11 @@ builder
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-// Configure cookie settings for CSRF protection
-builder.Services.ConfigureApplicationCookie(options =>
+// Configure cookie settings - PostConfigure ensures this runs AFTER Identity's configuration
+builder.Services.PostConfigureAll<CookieAuthenticationOptions>(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Lax; // Use Lax for same-site 
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-        ? CookieSecurePolicy.SameAsRequest
-        : CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
 builder
@@ -129,11 +127,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Enable HTTPS redirection in production
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+// NOTE: HTTPS redirection disabled - enable when HTTPS is configured
+// if (!app.Environment.IsDevelopment())
+// {
+//     app.UseHttpsRedirection();
+// }
 
 app.UseAuthentication();
 app.UseAuthorization();
