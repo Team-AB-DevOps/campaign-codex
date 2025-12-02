@@ -65,18 +65,10 @@ builder
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-// Configure cookie settings - must be after AddIdentityApiEndpoints
-builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.ApplicationScheme, options =>
+// Configure cookie settings - PostConfigure ensures this runs AFTER Identity's configuration
+builder.Services.PostConfigureAll<CookieAuthenticationOptions>(options =>
 {
     options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.HttpOnly = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-});
-
-builder.Services.Configure<CookieAuthenticationOptions>(IdentityConstants.BearerScheme, options =>
-{
-    options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 });
 
@@ -135,11 +127,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Enable HTTPS redirection in production
-if (!app.Environment.IsDevelopment())
-{
-    app.UseHttpsRedirection();
-}
+// NOTE: HTTPS redirection disabled - enable when HTTPS is configured
+// if (!app.Environment.IsDevelopment())
+// {
+//     app.UseHttpsRedirection();
+// }
 
 app.UseAuthentication();
 app.UseAuthorization();
