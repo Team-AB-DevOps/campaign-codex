@@ -79,6 +79,15 @@ jobs:
             echo "Build containers"
             sudo docker compose --env-file .env build --no-cache
             sudo docker compose --env-file .env up -d
+
+            echo "Wait for containers to be ready"
+            sleep 15
+
+            echo "Check API container environment"
+            sudo docker exec codex-api printenv | grep -E "ASPNETCORE|DOTNET" || true
+
+            echo "Check API container logs"
+            sudo docker logs codex-api --tail 20
     outputs:
       deployment_url: ${{ steps.set-url.outputs.url }}
       api_host: ${{ steps.set-url.outputs.api_host }}

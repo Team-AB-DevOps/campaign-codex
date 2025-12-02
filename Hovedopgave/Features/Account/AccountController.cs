@@ -5,6 +5,7 @@ using Hovedopgave.Features.Account.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 
 namespace Hovedopgave.Features.Account;
 
@@ -53,6 +54,17 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
     [HttpGet("user-info")]
     public async Task<ActionResult> GetUserInfo()
     {
+        // Debug logging for cookies
+        Log.Information("=== USER-INFO REQUEST DEBUG ===");
+        Log.Information("Cookies received: {CookieCount}", Request.Cookies.Count);
+        foreach (var cookie in Request.Cookies)
+        {
+            Log.Information("Cookie: {Key} = {Value}", cookie.Key, cookie.Value[..Math.Min(50, cookie.Value.Length)] + "...");
+        }
+        Log.Information("IsAuthenticated: {IsAuthenticated}", User.Identity?.IsAuthenticated);
+        Log.Information("Authorization Header: {AuthHeader}", Request.Headers["Authorization"].ToString());
+        Log.Information("=== END DEBUG ===");
+
         if (User.Identity?.IsAuthenticated == false)
         {
             return NoContent();
