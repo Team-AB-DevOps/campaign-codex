@@ -129,11 +129,11 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// NOTE: HTTPS redirection disabled - enable when HTTPS is configured
-// if (!app.Environment.IsDevelopment())
-// {
-//     app.UseHttpsRedirection();
-// }
+// NOTE: HTTPS redirection enabled for production. Ensure HTTPS is configured before deploying.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
