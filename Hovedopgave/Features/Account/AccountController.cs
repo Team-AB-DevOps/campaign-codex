@@ -15,10 +15,12 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
     [HttpPost("register")]
     public async Task<ActionResult> RegisterUser(RegisterDto registerDto)
     {
-
         if (!PasswordValidator.IsValidate(registerDto.Password))
         {
-            ModelState.AddModelError("Password", "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+            ModelState.AddModelError(
+                "Password",
+                "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character."
+            );
             return ValidationProblem();
         }
 
@@ -32,7 +34,7 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
         {
             UserName = registerDto.Email,
             Email = registerDto.Email,
-            DisplayName = registerDto.DisplayName
+            DisplayName = registerDto.DisplayName,
         };
 
         var result = await signInManager.UserManager.CreateAsync(user, registerDto.Password);
@@ -59,10 +61,17 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
         Log.Information("Cookies received: {CookieCount}", Request.Cookies.Count);
         foreach (var cookie in Request.Cookies)
         {
-            Log.Information("Cookie: {Key} = {Value}", cookie.Key, cookie.Value[..Math.Min(50, cookie.Value.Length)] + "...");
+            Log.Information(
+                "Cookie: {Key} = {Value}",
+                cookie.Key,
+                cookie.Value[..Math.Min(50, cookie.Value.Length)] + "..."
+            );
         }
         Log.Information("IsAuthenticated: {IsAuthenticated}", User.Identity?.IsAuthenticated);
-        Log.Information("Authorization Header: {AuthHeader}", Request.Headers["Authorization"].ToString());
+        Log.Information(
+            "Authorization Header: {AuthHeader}",
+            Request.Headers["Authorization"].ToString()
+        );
         Log.Information("=== END DEBUG ===");
 
         if (User.Identity?.IsAuthenticated == false)
@@ -77,12 +86,14 @@ public class AccountController(SignInManager<User> signInManager) : BaseApiContr
             return Unauthorized();
         }
 
-        return Ok(new
-        {
-            user.DisplayName,
-            user.Email,
-            user.Id,
-        });
+        return Ok(
+            new
+            {
+                user.DisplayName,
+                user.Email,
+                user.Id,
+            }
+        );
     }
 
     [HttpPost("logout")]
