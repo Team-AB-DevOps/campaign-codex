@@ -15,7 +15,7 @@ services:
     ports:
       - "4000:8080"
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Development # Remove if setting up HTTPS on server!
       - CONNECTION_STRING=server=postgres-db;port=5432;database=campaign_db;userid=${POSTGRES_USER};password=${POSTGRES_PASSWORD}
       - CloudName=${CloudName}
       - ApiKey=${ApiKey}

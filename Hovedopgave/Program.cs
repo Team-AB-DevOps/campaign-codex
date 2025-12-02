@@ -13,7 +13,6 @@ using Hovedopgave.Features.Characters.Services;
 using Hovedopgave.Features.Notes.Services;
 using Hovedopgave.Features.Photos.Services;
 using Hovedopgave.Features.Wiki.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -65,11 +64,14 @@ builder
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-// Configure cookie settings - PostConfigure ensures this runs AFTER Identity's configuration
-builder.Services.PostConfigureAll<CookieAuthenticationOptions>(options =>
+// Configure cookie settings for authentication
+builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.SameSite = SameSiteMode.Lax;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+        ? CookieSecurePolicy.SameAsRequest
+        : CookieSecurePolicy.Always;
 });
 
 builder
