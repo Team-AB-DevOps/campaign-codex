@@ -67,7 +67,7 @@ builder
 // Configure cookie settings for CSRF protection
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
         ? CookieSecurePolicy.SameAsRequest
