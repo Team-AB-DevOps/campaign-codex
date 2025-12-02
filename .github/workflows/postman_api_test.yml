@@ -25,6 +25,4 @@ jobs:
 
             - name: Run API tests
               run: |
-                  postman collection run "49446902-7691c269-a1d3-4cfa-a00c-63fc6f7fc15d" --env-var "HOST=http://${{ secrets.VM_IP_ADDRESS }}:4000"
-
-              # inputs.host
+                  postman collection run "49446902-7691c269-a1d3-4cfa-a00c-63fc6f7fc15d" --env-var "baseURL=http://${{ secrets.VM_IP_ADDRESS }}:4000"
