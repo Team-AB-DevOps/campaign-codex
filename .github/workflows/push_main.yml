@@ -24,7 +24,9 @@ jobs:
 
       - name: Set deployment URL output
         id: set-url
-        run: echo "url=${{ secrets.VITE_API_URL }}" >> $GITHUB_OUTPUT
+        run: |
+          echo "url=${{ secrets.VITE_API_URL }}" >> $GITHUB_OUTPUT
+          echo "api_host=http://${{ secrets.VM_IP_ADDRESS }}:3000" >> $GITHUB_OUTPUT
 
       - name: Executing remote SSH commands
         uses: appleboy/ssh-action@v1.2.2
@@ -74,7 +76,7 @@ jobs:
             echo "ApiSecret=$APISECRET" >> .env
 
             echo "Build containers"
-            sudo docker compose --env-file .env up -d
+            sudo docker compose --env-file .env up -d --build
 
             echo "Waiting for application to be ready..."
             for i in {1..30}; do
@@ -89,6 +91,13 @@ jobs:
             exit 1
     outputs:
       deployment_url: ${{ steps.set-url.outputs.url }}
+      api_host: ${{ steps.set-url.outputs.api_host }}
+
+  postman-api-tests:
+    name: API testing with Postman CLI
+    needs: deploy-containers
+    uses: ./.github/workflows/postman_api_test.yml
+    secrets: inherit
 
   e2e-tests:
     name: Run Playwright E2E Tests

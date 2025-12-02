@@ -1,0 +1,23 @@
+name: Postman API Tests
+
+on:
+    # workflow_call:
+    pull_request:
+
+jobs:
+    api-tests:
+        name: Run Postman API Tests
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install Postman CLI
+              run: |
+                  curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
+
+            - name: Login to Postman CLI
+              run: postman login --with-api-key ${{ secrets.POSTMAN_API_KEY }}
+
+            - name: Run API tests
+              run: |
+                  postman collection run "49446902-7691c269-a1d3-4cfa-a00c-63fc6f7fc15d" --env-var "baseURL=http://${{ secrets.VM_IP_ADDRESS }}:4000"
