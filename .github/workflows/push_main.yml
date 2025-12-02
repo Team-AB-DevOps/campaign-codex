@@ -98,8 +98,6 @@ jobs:
     needs: deploy-containers
     uses: ./.github/workflows/postman_api_test.yml
     secrets: inherit
-    with:
-      host: ${{ needs.deploy-containers.outputs.api_host }}
 
   e2e-tests:
     name: Run Playwright E2E Tests

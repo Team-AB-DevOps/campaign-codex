@@ -1,13 +1,7 @@
 name: Postman API Tests
 
 on:
-    pull_request:
-    # workflow_call:
-    #     inputs:
-    #         host:
-    #             description: "The host URL for the API"
-    #             required: true
-    #             type: string
+    workflow_call:
 
 jobs:
     api-tests:
