@@ -54,7 +54,7 @@ jobs:
             [ -n "$REPO_NAME" ] && rm -rf "$REPO_NAME"
 
             echo "Clone repository"
-            git clone "https://github.com/${{ github.repository }}.git"
+            git clone --branch "${{ github.head_ref || github.ref_name }}" "https://github.com/${{ github.repository }}.git"
 
             echo "cd to repository"
             cd "$REPO_NAME"
