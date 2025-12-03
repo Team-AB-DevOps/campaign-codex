@@ -76,8 +76,7 @@ jobs:
             echo "ApiSecret=$APISECRET" >> .env
 
             echo "Build containers"
-            sudo docker compose --env-file .env build
-            sudo docker compose --env-file .env up -d
+            sudo docker compose --env-file .env up -d --build
     outputs:
       deployment_url: ${{ steps.set-url.outputs.url }}
       api_host: ${{ steps.set-url.outputs.api_host }}
