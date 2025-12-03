@@ -14,9 +14,10 @@ public class CloudinaryService : ICloudinaryService
     public CloudinaryService(IOptions<CloudinarySettings> config)
     {
         var account = new Account(
-            config.Value.CloudName,
-            config.Value.ApiKey,
-            config.Value.ApiSecret);
+            Environment.GetEnvironmentVariable("CloudName") ?? throw new InvalidOperationException("CloudName not set"),
+            Environment.GetEnvironmentVariable("ApiKey") ?? throw new InvalidOperationException("ApiKey not set"),
+            Environment.GetEnvironmentVariable("ApiSecret") ?? throw new InvalidOperationException("ApiSecret not set")
+        );
 
         _cloudinary = new Cloudinary(account);
     }

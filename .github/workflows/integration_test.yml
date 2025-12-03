@@ -17,3 +17,7 @@ jobs:
 
       - name: Run Integration Tests
         run: dotnet test Tests.Integration/Tests.Integration.csproj
+        env:
+          CloudName: ${{ secrets.CLOUDNAME }}
+          ApiKey: ${{ secrets.APIKEY }}
+          ApiSecret: ${{ secrets.APISECRET }}

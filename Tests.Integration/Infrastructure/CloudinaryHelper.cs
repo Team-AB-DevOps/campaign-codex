@@ -1,4 +1,5 @@
-﻿using Hovedopgave.Core.Configuration;
+﻿using DotNetEnv;
+using Hovedopgave.Core.Configuration;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 
@@ -20,12 +21,14 @@ public static class CloudinaryHelper
 
     public static IOptions<CloudinarySettings> CreateCloudinarySettingsFile()
     {
+        Env.TraversePath().Load();
+
         return Options.Create(
             new CloudinarySettings
             {
-                CloudName = "dkcqshlp4",
-                ApiKey = "426284213378781",
-                ApiSecret = "WRaHhyJ4ta2kFKWKHjOrWWba4OA",
+                CloudName = Environment.GetEnvironmentVariable("CloudName") ?? throw new InvalidOperationException("CloudName not set"),
+                ApiKey = Environment.GetEnvironmentVariable("ApiKey") ?? throw new InvalidOperationException("ApiKey not set"),
+                ApiSecret = Environment.GetEnvironmentVariable("ApiSecret") ?? throw new InvalidOperationException("ApiSecret not set"),
             }
         );
     }
