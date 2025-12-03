@@ -53,7 +53,7 @@ jobs:
             [ -n "$REPO_NAME" ] && rm -rf "$REPO_NAME"
 
             echo "Clone repository"
-            git clone "https://github.com/${{ github.repository }}.git"
+            git clone --branch "${{ github.head_ref || github.ref_name }}" "https://github.com/${{ github.repository }}.git"
 
             echo "cd to repository"
             cd "$REPO_NAME"
@@ -81,11 +81,11 @@ jobs:
       deployment_url: ${{ steps.set-url.outputs.url }}
       api_host: ${{ steps.set-url.outputs.api_host }}
 
-  # postman-api-tests:
-  #   name: API testing with Postman CLI
-  #   needs: deploy-containers
-  #   uses: ./.github/workflows/postman_api_test.yml
-  #   secrets: inherit
+  postman-api-tests:
+    name: API testing with Postman CLI
+    needs: deploy-containers
+    uses: ./.github/workflows/postman_api_test.yml
+    secrets: inherit
 
   # e2e-tests:
   #   name: Run Playwright E2E Tests

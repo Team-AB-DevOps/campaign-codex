@@ -64,10 +64,10 @@ builder
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
-// Configure cookie settings for CSRF protection
+// Configure cookie settings for authentication
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Lax; // Use Lax for same-site 
+    options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
         ? CookieSecurePolicy.SameAsRequest
@@ -129,7 +129,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-// Enable HTTPS redirection in production
+// NOTE: HTTPS redirection enabled for production. Ensure HTTPS is configured before deploying.
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();
