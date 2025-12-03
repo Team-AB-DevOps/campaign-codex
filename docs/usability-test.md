@@ -8,16 +8,16 @@
 
 ## Target User Group
 
--   **Age Range:** 16-45 years
--   **Technical Proficiency:** Basic web navigation skills, familiar with social media or gaming platforms
--   **Current Practices:** Using character sheets (physical or digital), taking personal notes
+- **Age Range:** 16-45 years
+- **Technical Proficiency:** Basic web navigation skills, familiar with social media or gaming platforms
+- **Current Practices:** Using character sheets (physical or digital), taking personal notes
 
 ### User Characteristics
 
--   **Gaming Frequency:** Play or run games at least twice per month
--   **Digital Literacy:** Comfortable with web browsers, file uploads, and basic text editing
--   **Motivation:** Seeking better organization, collaboration, and accessibility of campaign materials
--   **Device Usage:** Primarily desktop/laptop users, with potential mobile access
+- **Gaming Frequency:** Play or run games at least twice per month
+- **Digital Literacy:** Comfortable with web browsers, file uploads, and basic text editing
+- **Motivation:** Seeking better organization, collaboration, and accessibility of campaign materials
+- **Device Usage:** Primarily desktop/laptop users, with potential mobile access
 
 ---
 
@@ -50,19 +50,19 @@
 
 #### Time on Task
 
--   **Measurement:** Record time from task initiation to successful completion
--   **Success Threshold:**
-    -   Simple tasks (e.g., navigation): ≤ 30 seconds
-    -   Medium tasks (e.g., creating a campaign): ≤ 2 minutes
-    -   Complex tasks (e.g., uploading map with pins): ≤ 4 minutes
+- **Measurement:** Record time from task initiation to successful completion
+- **Success Threshold:**
+  - Simple tasks (e.g., navigation): ≤ 30 seconds
+  - Medium tasks (e.g., creating a campaign): ≤ 2 minutes
+  - Complex tasks (e.g., uploading map with pins): ≤ 4 minutes
 
 #### Task Completion Rate
 
--   **Measurement:** Percentage of tasks completed successfully without assistance
--   **Success Criteria:**
-    -   Completed without help: Full success
-    -   Completed with minimal hint: Partial success
-    -   Unable to complete or required significant help: Failure
+- **Measurement:** Percentage of tasks completed successfully without assistance
+- **Success Criteria:**
+  - Completed without help: Full success
+  - Completed with minimal hint: Partial success
+  - Unable to complete or required significant help: Failure
 
 #### Error Count
 
@@ -77,7 +77,7 @@
 
 #### Help Requests
 
--   **Measurement:** Number of times participant asks for clarification or assistance
+- **Measurement:** Number of times participant asks for clarification or assistance
 
 ---
 
@@ -95,9 +95,9 @@
 
 **Success Criteria:**
 
--   Successfully navigates to registration page
--   Fills out all required fields correctly
--   Completes registration and lands on campaigns page
+- Successfully navigates to registration page
+- Fills out all required fields correctly
+- Completes registration and lands on campaigns page
 
 **Expected Time:** 1-2 minutes  
 **Common Errors:** Password requirements confusion, email validation issues
@@ -111,10 +111,10 @@
 
 **Success Criteria:**
 
--   Locates "Create Campaign" button/option
--   Enters campaign name
--   Successfully creates campaign
--   Navigates to campaign dashboard
+- Locates "Create Campaign" button/option
+- Enters campaign name
+- Successfully creates campaign
+- Navigates to campaign dashboard
 
 **Expected Time:** 30-45 seconds  
 **Common Errors:** Confusion about where to click, missing confirmation
@@ -135,10 +135,10 @@
 
 **Success Criteria:**
 
--   Navigates to Map section
--   Finds upload functionality
--   Successfully uploads image
--   Confirms map is visible
+- Navigates to Map section
+- Finds upload functionality
+- Successfully uploads image
+- Confirms map is visible
 
 **Expected Time:** 1-2 minutes  
 **Common Errors:** Can't find upload button, image preview issues
@@ -158,10 +158,10 @@ Add a brief description to each pin."
 
 **Success Criteria:**
 
--   Adds all three pins to map
--   Positions pins correctly (approximate)
--   Enters names and descriptions for each
--   Saves pins successfully
+- Adds all three pins to map
+- Positions pins correctly (approximate)
+- Enters names and descriptions for each
+- Saves pins successfully
 
 **Expected Time:** 3-4 minutes  
 **Common Errors:** Pin placement difficulties, forgetting to save, unclear icons
@@ -178,22 +178,22 @@ Add a brief description to each pin."
 **Instructions:**  
 "Create a wiki entry for an NPC named 'Elara Moonwhisper,' an elf merchant. Include the following information:
 
--   Type: NPC
--   Description: 'A mysterious elven merchant who trades in rare magical items'
--   Make it visible to players
--   Upload the character portrait image I'm providing"
+- Type: NPC
+- Description: 'A mysterious elven merchant who trades in rare magical items'
+- Make it visible to players
+- Upload the character portrait image I'm providing"
 
 **Provided:** Character portrait image (elara_portrait.jpg)
 
 **Success Criteria:**
 
--   Navigates to Wiki section
--   Creates new wiki entry
--   Selects NPC type
--   Enters name and description
--   Uploads image
--   Sets visibility to visible
--   Saves entry successfully
+- Navigates to Wiki section
+- Creates new wiki entry
+- Selects NPC type
+- Enters name and description
+- Uploads image
+- Sets visibility to visible
+- Saves entry successfully
 
 **Expected Time:** 2-3 minutes  
 **Common Errors:** Visibility toggle confusion, image upload issues, rich text editor confusion
@@ -208,15 +208,15 @@ Add a brief description to each pin."
 ##### Task 4.1: Add Player to Campaign
 
 **Instructions:**  
-"Add a player to your campaign using this email: sarah.player@test.com"
+"Add a player to your campaign using this email: <sarah.player@test.com>"
 
 **Success Criteria:**
 
--   Navigates to Players section
--   Finds "Add Player" functionality
--   Enters player email
--   Successfully sends invitation/adds player
--   Confirms player is in the list
+- Navigates to Players section
+- Finds "Add Player" functionality
+- Enters player email
+- Successfully sends invitation/adds player
+- Confirms player is in the list
 
 **Expected Time:** 1 minute  
 **Common Errors:** Can't find add player button, unclear confirmation
@@ -241,10 +241,10 @@ Add a brief description to each pin."
 
 **Success Criteria:**
 
--   Successfully navigates to Map section and views map
--   Locates and opens Wiki section
--   Finds NPC entry
--   Navigates to Players section and views player list
+- Successfully navigates to Map section and views map
+- Locates and opens Wiki section
+- Finds NPC entry
+- Navigates to Players section and views player list
 
 **Expected Time:** 2-3 minutes  
 **Common Errors:** Navigation confusion, missing sidebar items
