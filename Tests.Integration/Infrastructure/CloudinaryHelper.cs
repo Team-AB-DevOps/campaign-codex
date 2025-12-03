@@ -22,7 +22,7 @@ public static class CloudinaryHelper
     public static IOptions<CloudinarySettings> CreateCloudinarySettingsFile()
     {
         Env.TraversePath().Load();
-        
+
         return Options.Create(
             new CloudinarySettings
             {
