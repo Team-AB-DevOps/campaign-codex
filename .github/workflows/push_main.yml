@@ -81,6 +81,6 @@ jobs:
 
   e2e-tests:
     name: Run Playwright E2E Tests
-    needs: deploy-containers
+    needs: postman-api-tests
     uses: ./.github/workflows/playwright.yml
     secrets: inherit
