@@ -1,13 +1,6 @@
 name: Playwright Tests
 on:
-  pull_request:
-  # workflow_call:
-  #   inputs:
-  #     base_url:
-  #       description: "Base URL for Playwright tests"
-  #       required: false
-  #       type: string
-  #       default: "http://localhost:3000"
+  workflow_call:
 
 jobs:
   test:
@@ -27,19 +20,6 @@ jobs:
       - name: Install Playwright Browsers
         working-directory: ./Hovedopgave/client
         run: npx playwright install --with-deps
-
-      # - name: Wait for deployment to be ready (if testing deployed app)
-      #   if: ${{ inputs.base_url != 'http://localhost:3000' }}
-      #   run: |
-      #     echo "Waiting for application to be ready at ${{ inputs.base_url }}..."
-      #     for i in {1..30}; do
-      #       if curl -f ${{ inputs.base_url }} > /dev/null 2>&1; then
-      #         echo "Application is ready!"
-      #         break
-      #       fi
-      #       echo "Attempt $i: Application not ready yet, waiting..."
-      #       sleep 10
-      #     done
 
       - name: Run Playwright tests
         working-directory: ./Hovedopgave/client
