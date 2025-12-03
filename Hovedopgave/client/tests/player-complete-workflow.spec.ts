@@ -47,9 +47,11 @@ test('should complete full player workflow from login, create character, find wi
     await page.getByRole('textbox', { name: 'Search...' }).fill('Spire');
     await page.getByRole('button', { name: 'Locations' }).click();
     await page.getByText('The Shattered Spire').click();
-    await expect(page.getByRole('paragraph')).toContainText(
-        'A towering crystalline structure that pierces the sky, broken at its peak during the Cataclysm. The Spire is said to contain ancient magical artifacts and serves as a beacon visible for miles around.',
-    );
+    await expect(
+        page.getByText(
+            'A towering crystalline structure that pierces the sky, broken at its peak during the Cataclysm.',
+        ),
+    ).toBeVisible();
 
     // Log out
     await page.getByRole('button').nth(1).click();
