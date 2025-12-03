@@ -54,8 +54,7 @@ test('should complete full player workflow from login, create character, find wi
     ).toBeVisible();
 
     // Log out
-    await page.getByRole('button').nth(1).click();
+    await page.getByRole('img', { name: 'shadcn' }).click();
     await page.getByRole('menuitem', { name: 'Logout' }).click();
-    await page.goto('/login');
     await expect(page.getByRole('heading')).toContainText('Sign in');
 });
