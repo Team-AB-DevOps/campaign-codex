@@ -14,6 +14,7 @@ jobs:
     name: Run Integration DB Tests
     needs: unit-tests
     uses: ./.github/workflows/integration_test.yml
+    secrets: inherit
 
   deploy-containers:
     name: Deploy application to VM

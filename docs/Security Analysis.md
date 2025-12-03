@@ -161,16 +161,6 @@ var response = env.IsDevelopment()
 -   ✅ `.env.sample` and `.env_sample` template files provided for developers
 -   ✅ Connection string moved to environment variables
 
-**Remaining Issue:** Cloudinary API credentials are still hardcoded in `appsettings.json`:
-
-```json
-"CloudinarySettings": {
-    "CloudName": "dkcqshlp4",
-    "ApiKey": "426284213378781",
-    "ApiSecret": "WRaHhyJ4ta2kFKWKHjOrWWba4OA"
-}
-```
-
 **Impact:** Anyone with access to the repository can use these credentials to:
 
 -   Upload malicious content to your Cloudinary account
