@@ -1,12 +1,13 @@
 name: Playwright Tests
 on:
-  workflow_call:
-    inputs:
-      base_url:
-        description: "Base URL for Playwright tests"
-        required: false
-        type: string
-        default: "http://localhost:3000"
+  pull_request:
+  # workflow_call:
+  #   inputs:
+  #     base_url:
+  #       description: "Base URL for Playwright tests"
+  #       required: false
+  #       type: string
+  #       default: "http://localhost:3000"
 
 jobs:
   test:
@@ -27,23 +28,23 @@ jobs:
         working-directory: ./Hovedopgave/client
         run: npx playwright install --with-deps
 
-      - name: Wait for deployment to be ready (if testing deployed app)
-        if: ${{ inputs.base_url != 'http://localhost:3000' }}
-        run: |
-          echo "Waiting for application to be ready at ${{ inputs.base_url }}..."
-          for i in {1..30}; do
-            if curl -f ${{ inputs.base_url }} > /dev/null 2>&1; then
-              echo "Application is ready!"
-              break
-            fi
-            echo "Attempt $i: Application not ready yet, waiting..."
-            sleep 10
-          done
+      # - name: Wait for deployment to be ready (if testing deployed app)
+      #   if: ${{ inputs.base_url != 'http://localhost:3000' }}
+      #   run: |
+      #     echo "Waiting for application to be ready at ${{ inputs.base_url }}..."
+      #     for i in {1..30}; do
+      #       if curl -f ${{ inputs.base_url }} > /dev/null 2>&1; then
+      #         echo "Application is ready!"
+      #         break
+      #       fi
+      #       echo "Attempt $i: Application not ready yet, waiting..."
+      #       sleep 10
+      #     done
 
       - name: Run Playwright tests
         working-directory: ./Hovedopgave/client
         env:
-          PLAYWRIGHT_BASE_URL: ${{ inputs.base_url }}
+          PLAYWRIGHT_BASE_URL: ${{ secrets.PLAYWRIGHT_BASE_URL }}
         run: npx playwright test
 
       - uses: actions/upload-artifact@v4
