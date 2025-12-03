@@ -118,9 +118,9 @@ public class CharacterProgressionTests
     public void RemoveExperience_Should_ThrowException_WithNegativeXp(int xp)
     {
         var progression = new CharacterProgression();
-        
+
         var act = () => progression.RemoveExperience(xp);
-        
+
         act.Should().Throw<ArgumentException>();
     }
 
@@ -137,7 +137,7 @@ public class CharacterProgressionTests
 
         act.Should().NotThrow();
     }
-    
+
     #region White box tests
 
     [InlineData(0, 500)]
@@ -151,9 +151,9 @@ public class CharacterProgressionTests
     {
         var progression = new CharacterProgression();
         progression.AddExperience(500);
-        
+
         progression.RemoveExperience(xpToRemove);
-        
+
         progression.ExperiencePoints.Should().Be(expectedXp);
     }
 
@@ -165,9 +165,9 @@ public class CharacterProgressionTests
     {
         var progression = new CharacterProgression();
         progression.AddExperience(500);
-        
+
         progression.RemoveExperience(xpToRemove);
-        
+
         progression.ExperiencePoints.Should().Be(0);
         progression.Level.Should().Be(1);
     }
@@ -181,9 +181,9 @@ public class CharacterProgressionTests
     {
         var progression = new CharacterProgression();
         progression.AddExperience(64000); // Max level
-        
+
         var levelsGained = progression.AddExperience(xp);
-        
+
         levelsGained.Should().Be(0);
         progression.Level.Should().Be(10);
     }
@@ -201,18 +201,18 @@ public class CharacterProgressionTests
 
         levelsGained.Should().Be(expectedLevelsGained);
     }
-    
+
     #endregion
 
     #region Other tests
 
-        [Fact]
+    [Fact]
     public void GetProgressToNextLevel_Should_Return0_AtLevelStart()
     {
         var progression = new CharacterProgression();
-        
+
         var progress = progression.GetProgressToNextLevel();
-        
+
         progress.Should().Be(0.0);
     }
 
@@ -221,9 +221,9 @@ public class CharacterProgressionTests
     {
         var progression = new CharacterProgression();
         progression.AddExperience(150); // Midpoint between 0 and 300
-        
+
         var progress = progression.GetProgressToNextLevel();
-        
+
         progress.Should().Be(50.0);
     }
 
@@ -237,9 +237,9 @@ public class CharacterProgressionTests
     {
         var progression = new CharacterProgression();
         progression.AddExperience(xp);
-        
+
         var progress = progression.GetProgressToNextLevel();
-        
+
         progress.Should().BeApproximately(expectedProgress, 0.01);
     }
 
@@ -254,9 +254,9 @@ public class CharacterProgressionTests
     {
         var progression = new CharacterProgression();
         progression.AddExperience(xp);
-        
+
         var progress = progression.GetProgressToNextLevel();
-        
+
         progress.Should().BeApproximately(expectedProgress, 0.01);
     }
 
@@ -270,6 +270,6 @@ public class CharacterProgressionTests
 
         progress.Should().Be(100.0);
     }
-    
+
     #endregion
 }

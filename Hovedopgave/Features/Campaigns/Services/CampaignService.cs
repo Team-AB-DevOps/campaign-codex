@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Ganss.Xss;
 using Hovedopgave.Core.Data;
 using Hovedopgave.Core.Interfaces;
 using Hovedopgave.Core.Results;
@@ -125,7 +126,7 @@ public class CampaignService(
             if (existingPin != null)
             {
                 existingPin.Title = pin.Title;
-                existingPin.Description = pin.Description;
+                existingPin.Description = new HtmlSanitizer().Sanitize(pin.Description);;
                 existingPin.PositionX = pin.PositionX;
                 existingPin.PositionY = pin.PositionY;
                 existingPin.Icon = pin.Icon;
