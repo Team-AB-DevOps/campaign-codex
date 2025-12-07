@@ -2,7 +2,7 @@
 
 **campaign-codex** is a project designed to help Dungeon Masters (DMs) and players organize their D&D/TTRPG campaigns digitally, replacing physical notebooks with a centralized platform.
 
-Currently hosted on http://46.224.39.173.
+Currently hosted on <http://46.224.39.173>.
 
 ## Core Features
 - **Campaign Management**: Create/join campaigns with DM and player roles
