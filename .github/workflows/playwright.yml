@@ -4,6 +4,7 @@ on:
 
 jobs:
   test:
+    name: Run Playwright Tests
     timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
