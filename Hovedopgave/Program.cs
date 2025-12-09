@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;
 using DotNetEnv;
@@ -14,9 +15,16 @@ using Hovedopgave.Features.Notes.Services;
 using Hovedopgave.Features.Photos.Services;
 using Hovedopgave.Features.Wiki.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
