@@ -146,6 +146,37 @@ var response = env.IsDevelopment()
 | **Email Format Validation** | Validates email format                  | `registerSchema.ts`    |
 | **Password Confirmation**   | Confirms password match on registration | `registerSchema.ts`    |
 
+### 12. Security Headers
+
+| Defense                        | Implementation                                     | Location                  |
+| ------------------------------ | -------------------------------------------------- | ------------------------- |
+| **Content Security Policy**    | Restricts resource loading to trusted sources       | `Program.cs` line 130-140 |
+| **X-Frame-Options**            | Prevents Clickjacking (DENY)                       | `Program.cs` line 125     |
+| **X-Content-Type-Options**     | Prevents MIME-sniffing (nosniff)                   | `Program.cs` line 124     |
+| **Referrer-Policy**            | Limits referrer information leaked to other sites  | `Program.cs` line 127     |
+| **X-XSS-Protection**           | Enables legacy browser XSS filtering               | `Program.cs` line 126     |
+
+```csharp
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    context.Response.Headers.Append("X-Frame-Options", "DENY");
+    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append(
+        "Content-Security-Policy",
+        "default-src 'self'; " +
+        "script-src 'self'; " +
+        "style-src 'self' 'unsafe-inline'; " +
+        "img-src 'self' data: https://res.cloudinary.com; " +
+        "font-src 'self'; " +
+        "connect-src 'self'; " +
+        "frame-ancestors 'none';"
+    );
+    await next();
+});
+```
+
 ---
 
 ## ⚠️ Security Risks & Recommendations
@@ -249,7 +280,7 @@ public async Task<PhotoUploadResult?> UploadPhoto(IFormFile file)
 // Configure cookie settings for CSRF protection
 builder.Services.ConfigureApplicationCookie(options =>
 {
-    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
         ? CookieSecurePolicy.SameAsRequest
@@ -259,7 +290,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 **Defenses Applied:**
 
--   `SameSite=Strict` prevents cookies from being sent with cross-origin requests
+-   `SameSite=Lax` prevents cookies from being sent with cross-origin POST requests
 -   `HttpOnly` prevents JavaScript access to cookies
 -   `SecurePolicy=Always` in production ensures cookies are only sent over HTTPS
 
@@ -287,26 +318,17 @@ Both now require a minimum of 8 characters for passwords.
 
 ---
 
-### 6. **MEDIUM: Missing Security Headers** 🟡
+### 6. ~~**MEDIUM: Missing Security Headers**~~ ✅ RESOLVED
 
-**Risk Level:** MEDIUM
+**Status:** IMPLEMENTED
 
-**Issue:** No security headers configured (CSP, X-Frame-Options, etc.)
+**Implementation:** Security headers middleware added to `Program.cs` to mitigate XSS, Clickjacking, and MIME-sniffing.
 
-**Recommendation:**
-Add security headers middleware:
-
-```csharp
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Append("X-Frame-Options", "DENY");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
-    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self'");
-    await next();
-});
-```
+**Defenses Applied:**
+-   **CSP:** Whitelists trusted sources for scripts, styles, and images.
+-   **X-Frame-Options:** Set to `DENY` to prevent Clickjacking.
+-   **X-Content-Type-Options:** Set to `nosniff` to prevent MIME-type sniffing.
+-   **Referrer-Policy:** Set to `strict-origin-when-cross-origin`.
 
 ---
 
@@ -425,8 +447,8 @@ await context.Database.MigrateAsync();
 | Secrets Management     | ⚠️     | Partial - .env in gitignore, but appsettings still has secrets |
 | HTTPS                  | ✅     | Enabled in production                                          |
 | File Upload Validation | ⚠️     | Partial - size only                                            |
-| CSRF Protection        | ✅     | SameSite=Strict + HttpOnly + SecurePolicy                      |
-| Security Headers       | ❌     | Not configured                                                 |
+| CSRF Protection        | ✅     | SameSite=Lax + HttpOnly + SecurePolicy                         |
+| Security Headers       | ✅     | CSP, X-Frame-Options, X-Content-Type-Options, etc.             |
 | Input Validation       | ⚠️     | Partial - no length limits                                     |
 | Error Handling         | ✅     | Environment-aware                                              |
 | Logging                | ✅     | Serilog configured                                             |
@@ -438,8 +460,8 @@ await context.Database.MigrateAsync();
 1. **IMMEDIATE:** Rotate and secure Cloudinary API credentials (move to environment variables)
 2. ~~**HIGH:** Enable HTTPS redirection~~ ✅ DONE
 3. **HIGH:** Implement file upload validation (type, size, content)
-4. ~~**MEDIUM:** Add CSRF protection~~ ✅ DONE (SameSite=Strict cookies)
-5. **MEDIUM:** Configure security headers
+4. ~~**MEDIUM:** Add CSRF protection~~ ✅ DONE (SameSite=Lax cookies)
+5. ~~**MEDIUM:** Configure security headers~~ ✅ DONE
 6. ~~**MEDIUM:** Sync frontend/backend password validation~~ ✅ DONE
 7. **LOW:** Add input length validation to DTOs
 8. **LOW:** Configure environment-specific logging levels
@@ -448,5 +470,5 @@ await context.Database.MigrateAsync();
 ---
 
 _Initial Analysis Date: November 27, 2025_
-_Last Updated: November 30, 2025_
+_Last Updated: December 18, 2025_
 _Analyzed by: GitHub Copilot_
