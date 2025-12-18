@@ -122,22 +122,20 @@ app.UseCors(opt =>
 // Security Headers Middleware
 app.Use(async (context, next) =>
 {
-    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Append("X-Frame-Options", "DENY");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");                   // Forces browser to treat as file type, can't disguise files
+    context.Response.Headers.Append("X-Frame-Options", "DENY");                             // Can't be embedded in i-frame, prevents clickjacking (Legacy browser)
+    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");  // Only sends domain name, not full URL (no id's or queries)
     context.Response.Headers.Append(
-        "Content-Security-Policy",
-        "default-src 'self'; " +
-        "script-src 'self'; " +
-        "style-src 'self' 'unsafe-inline'; " +
-        "img-src 'self' data: https://res.cloudinary.com; " +
-        "font-src 'self'; " +
-        "connect-src 'self'; " +
-        "frame-ancestors 'none';"
+        "Content-Security-Policy",                              // Like a whitelist, what browser is allowed to load
+        "default-src 'self'; " +                                // Only JS from own domain
+        "script-src 'self'; " +                                 // Can only execute JS from own domain
+        "style-src 'self' 'unsafe-inline'; " +                  // Allows style tags in HTML. Needed for for modern frameworks (React)
+        "img-src 'self' data: https://res.cloudinary.com; " +   // Allow images from Cloudinary
+        "frame-ancestors 'none';"                               // Also prevents clickjacking (Modern browsers)
     );
     await next();
 });
+
 
 if (app.Environment.IsDevelopment())
 {
